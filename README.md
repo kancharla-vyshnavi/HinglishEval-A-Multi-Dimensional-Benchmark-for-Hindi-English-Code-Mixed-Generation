@@ -234,9 +234,37 @@ Final reliability outputs are available under:
 outputs/reliability_1000_FINAL/
 ```
 
----
+# 8. Human Evaluation & Validation
 
-# 8. Evaluator Robustness
+To complement the automated LLM-judge evaluation, the project includes a human evaluation component to assess the quality of generated Hinglish responses across six dimensions.
+
+## Evaluation Setup
+
+- **Responses evaluated:** 500
+- **Models covered:** HingGPT, Phi-3.5-mini, Qwen2.5-3B, and Qwen2.5-7B
+- **Rating scale:** 1–5 for each dimension
+- **Evaluation dimensions:** Fluency, Code-Mixing Naturalness, Hindi Grammar, Prompt Adherence, Spelling Consistency, and Overall Quality
+- **Current annotation status:** 500 records with complete ratings from one annotator
+
+## Human Evaluation Dimensions
+
+| Dimension | Description |
+|---|---|
+| Fluency | Naturalness and readability of the response |
+| Code-Mixing Naturalness | Appropriateness of Hindi-English mixing |
+| Hindi Grammar | Grammatical correctness of Hindi expressions |
+| Prompt Adherence | How well the response follows the prompt |
+| Spelling Consistency | Consistency of spelling and Romanized-Hindi transliteration |
+| Overall Quality | Overall perceived response quality |
+
+## Limitations
+
+The current 500-response rating dataset contains ratings from a single annotator. It therefore provides a human-assessment component but does not establish inter-annotator reliability or independent multi-annotator consensus. Additional independent annotations are needed before reporting inter-annotator agreement statistics such as Krippendorff's alpha or QWK.
+
+Human ratings should be interpreted alongside the automated judge results, inter-judge reliability analysis, and evaluator-robustness findings rather than as definitive ground truth.
+
+---
+# Evaluator Robustness
 
 A robustness experiment evaluates whether changing the evaluation rubric affects the Mistral judge's scores.
 
@@ -262,6 +290,7 @@ outputs/final_robustness/
 The robustness analysis is important because the inter-judge disagreement indicates that evaluator behavior is itself a source of measurement variability.
 
 ---
+
 
 # 9. Statistical Analysis
 
