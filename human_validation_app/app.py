@@ -101,30 +101,33 @@ class SaveAnnotationRequest(BaseModel):
 # --- Helper Functions ---
 
 def compute_annotator_progress(db: Session, annotator_id: str) -> Dict[str, Any]:
-    """Calculate verified progress metrics for a single annotator."""
-    completed_count = db.query(Annotation).filter(
+    """Calculate verified progress metrics for a single annotator using strict 6-dimension validation."""
+    valid_completed_query = db.query(Annotation.response_id).filter(
         Annotation.annotator_id == annotator_id,
-        Annotation.is_completed == True
-    ).count()
-
-    # Find earliest uncompleted response item_index
-    # We join Response and Annotation
-    subq = db.query(Annotation.response_id).filter(
-        Annotation.annotator_id == annotator_id,
-        Annotation.is_completed == True
+        Annotation.is_completed == True,
+        Annotation.fluency.between(1, 5),
+        Annotation.code_mixing_naturalness.between(1, 5),
+        Annotation.hindi_grammar.between(1, 5),
+        Annotation.prompt_adherence.between(1, 5),
+        Annotation.spelling_consistency.between(1, 5),
+        Annotation.overall.between(1, 5)
     )
 
+    completed_count = valid_completed_query.count()
+
     first_unrated = db.query(StimulusResponse.item_index).filter(
-        ~StimulusResponse.id.in_(subq)
+        ~StimulusResponse.id.in_(valid_completed_query)
     ).order_by(StimulusResponse.item_index.asc()).first()
 
     next_idx = first_unrated[0] if first_unrated else 1
-
-    pct = round((completed_count / TOTAL_EXPECTED_RESPONSES) * 100.0, 1) if TOTAL_EXPECTED_RESPONSES > 0 else 0.0
+    total_count = TOTAL_EXPECTED_RESPONSES
+    unanswered_count = max(0, total_count - completed_count)
+    pct = round((completed_count / total_count) * 100.0, 1) if total_count > 0 else 0.0
 
     return {
         "completed_count": completed_count,
-        "total_count": TOTAL_EXPECTED_RESPONSES,
+        "total_count": total_count,
+        "unanswered_count": unanswered_count,
         "percentage": pct,
         "next_unrated_index": next_idx
     }
@@ -289,7 +292,70 @@ def get_next_unrated(
     """Get the earliest incomplete item_index for the logged-in annotator."""
     annotator_id = user["annotator_id"]
     prog = compute_annotator_progress(db, annotator_id)
-    return {"next_index": prog["next_unrated_index"]}
+    return {
+        "next_index": prog["next_unrated_index"],
+        "completed_count": prog["completed_count"],
+        "total_count": prog["total_count"],
+        "is_all_completed": prog["completed_count"] >= prog["total_count"]
+    }
+
+
+@app.get("/api/responses/unanswered")
+def get_unanswered_responses(
+    user: Dict[str, Any] = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Fetch complete list of unanswered responses for the logged-in annotator.
+    Calculated directly from the active database using actual saved ratings
+    and all six valid dimensions (1..5). Never infers from current index.
+    """
+    annotator_id = user["annotator_id"]
+
+    valid_completed_query = db.query(Annotation.response_id).filter(
+        Annotation.annotator_id == annotator_id,
+        Annotation.is_completed == True,
+        Annotation.fluency.between(1, 5),
+        Annotation.code_mixing_naturalness.between(1, 5),
+        Annotation.hindi_grammar.between(1, 5),
+        Annotation.prompt_adherence.between(1, 5),
+        Annotation.spelling_consistency.between(1, 5),
+        Annotation.overall.between(1, 5)
+    )
+
+    unanswered_stimuli = db.query(
+        StimulusResponse.item_index,
+        StimulusResponse.id,
+        StimulusResponse.prompt
+    ).filter(
+        ~StimulusResponse.id.in_(valid_completed_query)
+    ).order_by(StimulusResponse.item_index.asc()).all()
+
+    total_count = TOTAL_EXPECTED_RESPONSES
+    unanswered_count = len(unanswered_stimuli)
+    completed_count = total_count - unanswered_count
+    pct = round((completed_count / total_count) * 100.0, 1) if total_count > 0 else 0.0
+
+    items = []
+    for r in unanswered_stimuli:
+        snippet = r.prompt.strip().replace("\n", " ") if r.prompt else ""
+        if len(snippet) > 110:
+            snippet = snippet[:110] + "..."
+        items.append({
+            "item_index": r.item_index,
+            "response_id": r.id,
+            "blinded_id": f"RESP_{r.item_index:04d}",
+            "prompt_snippet": snippet
+        })
+
+    return {
+        "annotator_id": annotator_id,
+        "total_count": total_count,
+        "completed_count": completed_count,
+        "unanswered_count": unanswered_count,
+        "percentage": pct,
+        "items": items
+    }
 
 
 # --- Rating Autosave Endpoint ---

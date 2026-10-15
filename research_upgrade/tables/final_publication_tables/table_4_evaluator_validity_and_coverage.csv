@@ -1,0 +1,6 @@
+Evaluator,Type,Total_Assigned,Completed,Valid_Judgments,Invalid_Judgments,Execution_Status,Study_Role
+Mistral-7B-Instruct-v0.3,Open-Weights (4-bit NF4),4000,4000,3990,10,VALIDATED_COMPLETED,Primary Headline Evaluator
+Qwen2.5-3B-Instruct,Open-Weights (4-bit NF4),4000,4000,3996,4,VALIDATED_COMPLETED,Secondary Cross-Validation Evaluator
+OLMo-2-0425-1B-Instruct,Open-Weights (16-bit FP16),4000,4000,3030,970,EXCLUDED_COLLAPSE,Documented Sub-3B Failure Mode (Scored Tracebacks >=3)
+gpt-4o-mini-2024-07-18,Frontier API,4000,0,0,0,NOT_RUN,Blocked (OpenAI account credit balance exhausted; $0.00 spend)
+claude-3-5-haiku-20241022,Frontier API,4000,0,0,0,NOT_RUN,Blocked (ANTHROPIC_API_KEY credential unset; $0.00 spend)

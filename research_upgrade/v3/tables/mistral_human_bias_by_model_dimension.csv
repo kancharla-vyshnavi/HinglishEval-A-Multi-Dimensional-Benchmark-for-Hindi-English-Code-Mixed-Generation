@@ -1,0 +1,31 @@
+model,dimension,dimension_label,sample_size,human_mean,mistral_mean,bias_mistral_minus_human,bias_ci_95_low,bias_ci_95_high,pearson_r,spearman_rho,quadratic_weighted_kappa
+Qwen2.5-3B,fluency,Fluency,125,2.912,3.528,0.616,0.3838,0.848,-0.0825,-0.0991,-0.0664
+Qwen2.5-3B,code_mixing_naturalness,Code-Mixing,125,2.664,3.96,1.296,1.016,1.552,-0.0444,-0.0236,-0.0233
+Qwen2.5-3B,hindi_grammar,Hindi Grammar,125,2.904,2.904,0.0,-0.24,0.232,-0.1108,-0.1206,-0.1106
+Qwen2.5-3B,prompt_adherence,Prompt Adherence,125,2.568,3.8,1.232,0.936,1.512,-0.0054,0.0139,-0.0031
+Qwen2.5-3B,spelling_consistency,Spelling,125,2.8,4.656,1.856,1.656,2.048,0.1074,0.115,0.0309
+Qwen2.5-3B,overall,Overall Quality,125,2.704,3.568,0.864,0.6,1.12,-0.0967,-0.0577,-0.0701
+Qwen2.5-7B,fluency,Fluency,125,2.72,3.224,0.504,0.296,0.704,0.3255,0.2472,0.2889
+Qwen2.5-7B,code_mixing_naturalness,Code-Mixing,125,2.488,3.696,1.208,0.976,1.432,0.3607,0.3142,0.2095
+Qwen2.5-7B,hindi_grammar,Hindi Grammar,125,2.624,2.632,0.008,-0.208,0.224,0.2193,0.1857,0.2193
+Qwen2.5-7B,prompt_adherence,Prompt Adherence,125,2.472,3.072,0.6,0.296,0.896,0.1831,0.183,0.1459
+Qwen2.5-7B,spelling_consistency,Spelling,125,2.552,4.736,2.184,1.976,2.384,0.0267,-0.1112,0.0058
+Qwen2.5-7B,overall,Overall Quality,125,2.48,3.128,0.648,0.424,0.872,0.2932,0.2782,0.2449
+HingGPT,fluency,Fluency,125,2.488,2.264,-0.224,-0.496,0.04,-0.0516,-0.0594,-0.0504
+HingGPT,code_mixing_naturalness,Code-Mixing,125,2.248,2.584,0.336,0.056,0.616,-0.0075,-0.0139,-0.0069
+HingGPT,hindi_grammar,Hindi Grammar,125,2.568,1.736,-0.832,-1.064,-0.6,-0.1125,-0.1146,-0.0713
+HingGPT,prompt_adherence,Prompt Adherence,125,2.136,2.0,-0.136,-0.4,0.136,-0.046,-0.0111,-0.0436
+HingGPT,spelling_consistency,Spelling,125,2.408,2.88,0.472,0.184,0.752,0.1029,0.1063,0.0931
+HingGPT,overall,Overall Quality,125,2.192,2.152,-0.04,-0.296,0.216,-0.1537,-0.1452,-0.1523
+Phi-3.5-mini,fluency,Fluency,125,2.384,1.048,-1.336,-1.528,-1.144,-0.0583,-0.06,-0.0125
+Phi-3.5-mini,code_mixing_naturalness,Code-Mixing,125,2.104,1.064,-1.04,-1.224,-0.856,-0.0558,-0.0129,-0.0211
+Phi-3.5-mini,hindi_grammar,Hindi Grammar,125,2.328,1.016,-1.312,-1.496,-1.128,-0.0289,-0.0339,-0.0038
+Phi-3.5-mini,prompt_adherence,Prompt Adherence,125,2.088,1.032,-1.056,-1.224,-0.888,-0.0087,-0.0013,-0.0027
+Phi-3.5-mini,spelling_consistency,Spelling,125,2.24,1.096,-1.144,-1.344,-0.944,-0.0468,-0.0502,-0.0182
+Phi-3.5-mini,overall,Overall Quality,125,2.112,1.032,-1.08,-1.256,-0.904,-0.0944,-0.1329,-0.0184
+ALL_MODELS_POOLED,fluency,Fluency,500,2.626,2.516,-0.11,-0.242,0.018,0.1769,0.1579,0.1706
+ALL_MODELS_POOLED,code_mixing_naturalness,Code-Mixing,500,2.376,2.826,0.45,0.298,0.594,0.2155,0.2215,0.1761
+ALL_MODELS_POOLED,hindi_grammar,Hindi Grammar,500,2.606,2.072,-0.534,-0.652,-0.414,0.1388,0.127,0.1223
+ALL_MODELS_POOLED,prompt_adherence,Prompt Adherence,500,2.316,2.476,0.16,0.006,0.31,0.1781,0.1914,0.153
+ALL_MODELS_POOLED,spelling_consistency,Spelling,500,2.5,3.342,0.842,0.6799,1.002,0.1891,0.1754,0.1388
+ALL_MODELS_POOLED,overall,Overall Quality,500,2.372,2.47,0.098,-0.036,0.232,0.1788,0.1837,0.1691

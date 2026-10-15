@@ -135,7 +135,7 @@ def analyze_agreement(csv_path: Optional[str] = None) -> str:
     df_a = df_comp[df_comp["annotator_id"] == "annotator_a"].set_index("response_id")
     df_b = df_comp[df_comp["annotator_id"] == "annotator_b"].set_index("response_id")
 
-    matched_ids = list(df_a.index.intersection(df_b.index))
+    matched_ids = sorted(list(set(df_a.index).intersection(set(df_b.index))))
     matched_count = len(matched_ids)
 
     timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -191,7 +191,7 @@ def analyze_agreement(csv_path: Optional[str] = None) -> str:
         qwk_str = f"{qwk:.3f} [{qwk_lo:.2f}, {qwk_hi:.2f}]" if not np.isnan(qwk_lo) else f"{qwk:.3f}"
         alpha_str = f"{alpha:.3f} [{alpha_lo:.2f}, {alpha_hi:.2f}]" if not np.isnan(alpha_lo) else f"{alpha:.3f}"
 
-        pretty_dim = dim.replace("_", " ").title()
+        pretty_dim = "Overall Quality" if dim == "overall" else dim.replace("_", " ").title()
         report += f"| **{pretty_dim}** | {matched_count} | {exact_pct:.1f}% | {close_pct:.1f}% | {qwk_str} | {alpha_str} |\n"
 
     report += f"""

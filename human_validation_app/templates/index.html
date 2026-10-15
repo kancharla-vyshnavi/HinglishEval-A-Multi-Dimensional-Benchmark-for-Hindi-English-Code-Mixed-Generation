@@ -84,6 +84,9 @@
         <div class="progress-label-group">
           <span class="progress-title">Your Evaluation Progress</span>
           <span class="progress-counter" id="progress-text">0 / 4,000 completed</span>
+          <span class="unanswered-pill" id="unanswered-pill" style="display: none;" title="Unanswered responses count">
+            <span id="unanswered-pill-count">0</span> unanswered
+          </span>
         </div>
         <div class="progress-percent-badge" id="progress-percent">0.0%</div>
       </div>
@@ -98,9 +101,14 @@
           <button type="button" class="btn-small" id="jump-go-btn">Go</button>
         </div>
 
-        <button type="button" class="btn-resume" id="resume-unrated-btn">
-          ⚡ Jump to Next Unanswered
-        </button>
+        <div class="nav-action-buttons">
+          <button type="button" class="btn-resume btn-unanswered" id="unanswered-modal-btn" title="View all unanswered responses">
+            📋 Unanswered Responses (<span id="unanswered-count-badge">0</span>)
+          </button>
+          <button type="button" class="btn-resume" id="resume-unrated-btn">
+            ⚡ Jump to Next Unanswered
+          </button>
+        </div>
       </div>
     </section>
 
@@ -261,9 +269,9 @@
             ← Previous
           </button>
           
-          <div class="nav-status-msg" id="nav-status-msg">
-            Press <strong>Save & Next</strong> to proceed
-          </div>
+          <button type="button" class="btn-resume" id="footer-resume-btn" style="padding: 0.6rem 1rem; font-size: 0.9rem;">
+            ⚡ Next Unanswered
+          </button>
 
           <button type="button" class="btn-primary" id="save-next-btn">
             Save & Next →
@@ -274,6 +282,65 @@
 
     </div>
   </main>
+
+  <!-- Unanswered Responses Modal -->
+  <div id="unanswered-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card unanswered-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <div>
+          <div class="modal-badge">Progress Breakdown</div>
+          <h2 style="margin: 0.25rem 0 0 0; font-size: 1.25rem;">Unanswered Responses</h2>
+        </div>
+        <button type="button" class="btn-subtle" id="close-unanswered-btn" style="font-size: 1.25rem; padding: 0.25rem 0.6rem;" aria-label="Close">&times;</button>
+      </div>
+
+      <!-- Live Totals Banner -->
+      <div class="unanswered-stats-banner">
+        <div class="stat-pill">
+          <span class="stat-label">Completed:</span>
+          <strong class="stat-value text-success" id="modal-stat-completed">0</strong>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Unanswered:</span>
+          <strong class="stat-value text-warning" id="modal-stat-unanswered">0</strong>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Total:</span>
+          <strong class="stat-value" id="modal-stat-total">4,000</strong>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Progress:</span>
+          <strong class="stat-value text-primary" id="modal-stat-percent">0.0%</strong>
+        </div>
+      </div>
+
+      <!-- Search Controls -->
+      <div class="unanswered-search-row">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="unanswered-search-input"
+            class="form-input search-input"
+            placeholder="Search by item # (e.g. 1653), ID (e.g. RESP_1653), or prompt text..."
+            autocomplete="off"
+          >
+          <button type="button" class="clear-search-btn" id="clear-search-btn" style="display: none;" title="Clear Search">&times;</button>
+        </div>
+        <div class="search-meta" id="search-meta-text">Loading unanswered items...</div>
+      </div>
+
+      <!-- Scrollable List of Items -->
+      <div class="unanswered-list-container" id="unanswered-list-container" role="region" aria-label="Unanswered responses list">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="modal-footer-row">
+        <span class="footer-hint">Click any response or "Open" to jump directly to it.</span>
+        <button type="button" class="btn-primary" id="dismiss-unanswered-btn">Close</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Scoring Guide / Rubric Modal -->
   <div id="rubric-modal" class="modal-overlay" style="display: none;">

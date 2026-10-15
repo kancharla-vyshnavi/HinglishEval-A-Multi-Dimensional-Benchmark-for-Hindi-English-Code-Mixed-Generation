@@ -1,0 +1,7 @@
+Dimension,Matched_Pairs_N,Quadratic_Weighted_Kappa_QWK,Spearman_Rho,P_Value,Agreement_Interpretation
+Fluency,3986,0.392,0.442,2.31e-190,Moderate positive alignment
+Code Mixing Naturalness,3986,0.357,0.391,4.51e-146,Moderate positive alignment
+Hindi Grammar,3986,0.418,0.443,1.20e-191,Substantial positive alignment
+Prompt Adherence,3986,0.499,0.474,4.76e-222,Substantial positive alignment
+Spelling Consistency,3986,0.204,0.243,7.76e-55,Moderate positive alignment
+Overall,3986,0.435,0.445,9.83e-193,Substantial positive alignment

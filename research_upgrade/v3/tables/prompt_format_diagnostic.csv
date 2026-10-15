@@ -1,0 +1,9 @@
+﻿model,condition,format_description,total_prompts,prompt_echo_count,prompt_echo_pct,refusal_count,refusal_pct,junk_malformed_count,junk_malformed_pct,truncation_count,truncation_pct,valid_response_count,valid_response_pct
+HingGPT,current_inference,Original chat template without turn EOS / generic instruction wrapper,100,0,0.0,0,0.0,0,0.0,100,100.0,7,7.0
+HingGPT,plain_continuation,Direct causal continuation (Hinglish: <text> -> Response:) matching pretraining,100,10,10.0,0,0.0,8,8.0,15,15.0,92,92.0
+Phi-3.5-mini,current_inference,Original chat template without turn EOS / generic instruction wrapper,100,2,2.0,0,0.0,1,1.0,100,100.0,6,6.0
+Phi-3.5-mini,plain_continuation,Direct causal continuation (Hinglish: <text> -> Response:) matching pretraining,100,3,3.0,3,3.0,5,5.0,12,12.0,95,95.0
+Qwen2.5-3B,current_inference,Original chat template without turn EOS / generic instruction wrapper,100,0,0.0,0,0.0,0,0.0,98,98.0,7,7.0
+Qwen2.5-3B,plain_continuation,Direct causal continuation (Hinglish: <text> -> Response:) matching pretraining,100,2,2.0,0,0.0,1,1.0,9,9.0,99,99.0
+Qwen2.5-7B,current_inference,Original chat template without turn EOS / generic instruction wrapper,100,2,2.0,4,4.0,1,1.0,96,96.0,3,3.0
+Qwen2.5-7B,plain_continuation,Direct causal continuation (Hinglish: <text> -> Response:) matching pretraining,100,2,2.0,0,0.0,4,4.0,12,12.0,96,96.0

@@ -1,0 +1,37 @@
+dimension,dimension_label,model_1,model_2,n_1,n_2,mann_whitney_u,raw_p_value,holm_adjusted_p_value,is_significant_raw_05,is_significant_holm_05
+fluency,Fluency,Qwen2.5-3B,Qwen2.5-7B,125,125,8594.0,1.4475e-01,2.9808e-01,False,False
+fluency,Fluency,Qwen2.5-3B,HingGPT,125,125,9487.0,1.8223e-03,9.1117e-03,True,True
+fluency,Fluency,Qwen2.5-3B,Phi-3.5-mini,125,125,9924.0,8.4083e-05,5.0450e-04,True,True
+fluency,Fluency,Qwen2.5-7B,HingGPT,125,125,8714.0,9.9361e-02,2.9808e-01,False,False
+fluency,Fluency,Qwen2.5-7B,Phi-3.5-mini,125,125,9132.0,1.5795e-02,6.3179e-02,True,False
+fluency,Fluency,HingGPT,Phi-3.5-mini,125,125,8217.0,4.5907e-01,4.5907e-01,False,False
+code_mixing_naturalness,Code-Mixing Naturalness,Qwen2.5-3B,Qwen2.5-7B,125,125,8692.0,1.0097e-01,2.0194e-01,False,False
+code_mixing_naturalness,Code-Mixing Naturalness,Qwen2.5-3B,HingGPT,125,125,9826.0,2.0097e-04,1.0049e-03,True,True
+code_mixing_naturalness,Code-Mixing Naturalness,Qwen2.5-3B,Phi-3.5-mini,125,125,10442.5,1.3298e-06,7.9787e-06,True,True
+code_mixing_naturalness,Code-Mixing Naturalness,Qwen2.5-7B,HingGPT,125,125,8998.5,2.8460e-02,8.5379e-02,True,False
+code_mixing_naturalness,Code-Mixing Naturalness,Qwen2.5-7B,Phi-3.5-mini,125,125,9643.0,7.5244e-04,3.0098e-03,True,True
+code_mixing_naturalness,Code-Mixing Naturalness,HingGPT,Phi-3.5-mini,125,125,8469.0,2.2785e-01,2.2785e-01,False,False
+hindi_grammar,Hindi Grammar,Qwen2.5-3B,Qwen2.5-7B,125,125,9076.0,1.7920e-02,8.9599e-02,True,False
+hindi_grammar,Hindi Grammar,Qwen2.5-3B,HingGPT,125,125,9042.5,2.1453e-02,8.9599e-02,True,False
+hindi_grammar,Hindi Grammar,Qwen2.5-3B,Phi-3.5-mini,125,125,10196.5,1.0118e-05,6.0711e-05,True,True
+hindi_grammar,Hindi Grammar,Qwen2.5-7B,HingGPT,125,125,7896.0,8.7797e-01,8.7797e-01,False,False
+hindi_grammar,Hindi Grammar,Qwen2.5-7B,Phi-3.5-mini,125,125,9004.5,2.8489e-02,8.9599e-02,True,False
+hindi_grammar,Hindi Grammar,HingGPT,Phi-3.5-mini,125,125,8817.5,6.4674e-02,1.2935e-01,False,False
+prompt_adherence,Prompt Adherence,Qwen2.5-3B,Qwen2.5-7B,125,125,8312.5,3.5486e-01,7.0972e-01,False,False
+prompt_adherence,Prompt Adherence,Qwen2.5-3B,HingGPT,125,125,9870.5,1.3613e-04,6.8067e-04,True,True
+prompt_adherence,Prompt Adherence,Qwen2.5-3B,Phi-3.5-mini,125,125,10055.5,3.5778e-05,2.1467e-04,True,True
+prompt_adherence,Prompt Adherence,Qwen2.5-7B,HingGPT,125,125,9324.5,5.1916e-03,1.5575e-02,True,True
+prompt_adherence,Prompt Adherence,Qwen2.5-7B,Phi-3.5-mini,125,125,9528.0,1.6074e-03,6.4297e-03,True,True
+prompt_adherence,Prompt Adherence,HingGPT,Phi-3.5-mini,125,125,8079.5,6.2167e-01,7.0972e-01,False,False
+spelling_consistency,Spelling Consistency,Qwen2.5-3B,Qwen2.5-7B,125,125,8991.0,2.8236e-02,8.4708e-02,True,False
+spelling_consistency,Spelling Consistency,Qwen2.5-3B,HingGPT,125,125,9320.0,5.4505e-03,2.7252e-02,True,True
+spelling_consistency,Spelling Consistency,Qwen2.5-3B,Phi-3.5-mini,125,125,10242.5,8.3672e-06,5.0203e-05,True,True
+spelling_consistency,Spelling Consistency,Qwen2.5-7B,HingGPT,125,125,8285.0,3.8465e-01,3.8465e-01,False,False
+spelling_consistency,Spelling Consistency,Qwen2.5-7B,Phi-3.5-mini,125,125,9201.5,1.0771e-02,4.3084e-02,True,True
+spelling_consistency,Spelling Consistency,HingGPT,Phi-3.5-mini,125,125,8566.0,1.6872e-01,3.3745e-01,False,False
+overall,Overall Quality,Qwen2.5-3B,Qwen2.5-7B,125,125,8808.0,6.7062e-02,1.3412e-01,False,False
+overall,Overall Quality,Qwen2.5-3B,HingGPT,125,125,10002.5,5.6601e-05,2.8300e-04,True,True
+overall,Overall Quality,Qwen2.5-3B,Phi-3.5-mini,125,125,10384.5,2.4988e-06,1.4993e-05,True,True
+overall,Overall Quality,Qwen2.5-7B,HingGPT,125,125,8994.5,2.9888e-02,8.9664e-02,True,False
+overall,Overall Quality,Qwen2.5-7B,Phi-3.5-mini,125,125,9414.5,3.3337e-03,1.3335e-02,True,True
+overall,Overall Quality,HingGPT,Phi-3.5-mini,125,125,8275.0,3.9563e-01,3.9563e-01,False,False

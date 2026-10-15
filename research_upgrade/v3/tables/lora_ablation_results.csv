@@ -1,0 +1,4 @@
+lora_rank_r,lora_alpha,trainable_lora_params,base_model_params,trainable_param_pct,adapter_weight_mb,adamw_optimizer_state_mb,checkpoint_path,validation_cross_entropy,validation_perplexity,execution_status,feasibility_notes
+8,16,8257536,3086000000,0.2676,15.75,126.0,models/qwen25_3b_cpt/checkpoint-17340,4.0566,57.78,COMPLETED_ORIGINAL,"Official adapted checkpoint (17,340 steps on 277k sequences)"
+16,32,16515072,3086000000,0.5352,31.5,252.0,N/A (Requires >100 GPU compute hours on host RTX 4050),,,BLOCKED_GPU_TIME,"Theoretical model: rank capacity 2x; memory fits in 6GB VRAM, but full retraining exceeds local workstation thermal/compute budget"
+64,128,66060288,3086000000,2.1406,126.0,1008.0,N/A (Requires >100 GPU compute hours on host RTX 4050),,,BLOCKED_GPU_TIME,"Theoretical model: rank capacity 8x; memory fits in 6GB VRAM, but full retraining exceeds local workstation thermal/compute budget"

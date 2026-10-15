@@ -1,0 +1,6 @@
+Evaluator,Assigned,Valid,Failed_Syntax,Traceback_Hallucinations,Unexecuted_Quota,Exclusion_Reason
+Mistral-7B-Instruct-v0.3,4000,3990,10,0,0,Retained as primary headline evaluator (10 unparsed/empty generations flagged)
+Qwen2.5-3B-Instruct,4000,3996,4,0,0,Retained as secondary dual evaluator (4 malformed generations flagged)
+OLMo-2-0425-1B-Instruct,4000,3030,0,970,0,Excluded: scored 970 Python exception tracebacks >=3; ceiling saturation
+gpt-4o-mini-2024-07-18,4000,0,0,0,4000,Not run: API quota exhausted (RateLimitError 429 credit_balance_exhausted; $0.00 spend)
+claude-3-5-haiku-20241022,4000,0,0,0,4000,Not run: API credentials absent (ANTHROPIC_API_KEY unset; $0.00 spend)

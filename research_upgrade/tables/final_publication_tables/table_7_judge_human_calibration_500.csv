@@ -1,0 +1,7 @@
+Dimension,Human_Mean,Mistral_Mean,Mean_Signed_Bias,Bias_95CI,Spearman_Rho,P_Value,QWK,Calibration_Interpretation
+Fluency,2.626,2.516,-0.11,"[-0.222, +0.004]",0.158,3.93e-04,0.171,Well-Calibrated
+Code-Mixing,2.376,2.826,0.45,"[+0.311, +0.587]",0.222,5.64e-07,0.176,Lenient (+)
+Hindi Grammar,2.606,2.072,-0.534,"[-0.638, -0.414]",0.127,4.44e-03,0.122,Strict (-)
+Prompt Adherence,2.316,2.476,0.16,"[+0.034, +0.297]",0.191,1.63e-05,0.153,Well-Calibrated
+Spelling,2.5,3.342,0.842,"[+0.672, +0.997]",0.175,8.05e-05,0.139,Lenient (+)
+Overall Quality,2.372,2.47,0.098,"[-0.018, +0.232]",0.184,3.57e-05,0.169,Well-Calibrated

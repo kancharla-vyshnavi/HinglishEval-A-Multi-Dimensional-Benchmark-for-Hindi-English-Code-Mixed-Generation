@@ -1,0 +1,5 @@
+Model,N,fluency_mean,fluency_sd,fluency_display,code_mixing_naturalness_mean,code_mixing_naturalness_sd,code_mixing_naturalness_display,hindi_grammar_mean,hindi_grammar_sd,hindi_grammar_display,prompt_adherence_mean,prompt_adherence_sd,prompt_adherence_display,spelling_consistency_mean,spelling_consistency_sd,spelling_consistency_display,overall_mean,overall_sd,overall_display
+HingGPT,1000,2.123,1.003,2.123 +/- 1.003,2.4,1.279,2.400 +/- 1.279,1.644,0.631,1.644 +/- 0.631,1.783,1.057,1.783 +/- 1.057,2.868,1.426,2.868 +/- 1.426,1.99,0.951,1.990 +/- 0.951
+Phi-3.5-mini,1000,1.028,0.235,1.028 +/- 0.235,1.041,0.363,1.041 +/- 0.363,1.014,0.167,1.014 +/- 0.167,1.032,0.333,1.032 +/- 0.333,1.054,0.411,1.054 +/- 0.411,1.027,0.242,1.027 +/- 0.242
+Qwen2.5-3B,1000,3.533,0.921,3.533 +/- 0.921,3.979,1.211,3.979 +/- 1.211,2.943,0.954,2.943 +/- 0.954,3.741,1.399,3.741 +/- 1.399,4.648,0.876,4.648 +/- 0.876,3.563,1.081,3.563 +/- 1.081
+Qwen2.5-7B,1000,3.251,0.991,3.251 +/- 0.991,3.682,1.235,3.682 +/- 1.235,2.61,0.942,2.610 +/- 0.942,3.072,1.531,3.072 +/- 1.531,4.664,0.837,4.664 +/- 0.837,3.173,1.139,3.173 +/- 1.139

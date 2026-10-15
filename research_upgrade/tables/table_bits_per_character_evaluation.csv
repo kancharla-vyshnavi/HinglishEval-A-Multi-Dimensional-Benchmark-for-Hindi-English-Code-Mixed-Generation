@@ -1,0 +1,5 @@
+Model,Perplexity,Cross_Entropy_Loss_Nats,Entropy_Bits_per_Token,Chars_per_Token,Bits_per_Character_BPC
+HingGPT,171.232,5.143,7.4198,4.3,1.7255
+Phi-3.5-mini,50.7891,3.9277,5.6664,2.6803,2.1141
+Qwen2.5-3B,74.0219,4.3044,6.2099,3.1029,2.0013
+Qwen2.5-7B,55.129,4.0097,5.7847,3.1029,1.8643

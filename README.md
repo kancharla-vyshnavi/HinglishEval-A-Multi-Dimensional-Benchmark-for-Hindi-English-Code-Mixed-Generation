@@ -47,20 +47,13 @@ The evaluation uses the same benchmark prompts and controlled generation procedu
 
 # 3. Dataset & Benchmark
 
-The project uses a cleaned and deduplicated **Natural Hinglish Corpus** containing approximately **14,601 usable rows**.
+The project uses a cleaned and deduplicated **Natural Hinglish Corpus** containing approximately **14,601 usable sequences** (`data/processed/cpt/validation.jsonl`).
 
-The benchmark used for final controlled evaluation contains exactly:
-
-* **1,000 benchmark prompts**
-* **4 models**
-* **4,000 controlled generations**
-* The same 1,000 prompts are evaluated across all models
-
-Benchmark file:
-
-```text
-data/benchmarks/hinglish_bench_.csv
-```
+### Benchmark Provenance & Contamination Audit
+- **Original Benchmark Prompts:** **1,000 prompts** sampled deterministically (seed `42`) across conversational Hinglish genres (`data/benchmarks/hinglish_bench_.csv`).
+- **Quarantined Near-Duplicates:** **8 prompts** with Jaccard 8-gram overlap $0.80 \le J < 0.90$ representing formulaic colloquial greetings.
+- **Leakage-Filtered Benchmark Subset:** **992 prompts** confirmed strictly leakage-free ($J < 0.80$) against the 277k CPT training corpus (`research_upgrade/tables/proposed_leakage_free_benchmark_992.csv`).
+- **Controlled Generator Outputs:** **4,000 generations** evaluated across the 1,000 original prompts across four models with nucleus decoding (temperature = 0.7, top-p = 0.9, max new tokens = 50, repetition penalty = 1.1).
 
 ## Benchmark Structure
 
@@ -71,7 +64,7 @@ data/benchmarks/hinglish_bench_.csv
 | `prompt`      | Controlled Hinglish generation prompt |
 | `source_text` | Corresponding source text             |
 
-The benchmark is designed so that model outputs can be compared under the same prompt conditions.
+The benchmark is designed so that model outputs can be compared under identical prompt conditions.
 
 ---
 
@@ -107,7 +100,7 @@ Hinglish-Bench
         ├──────────────────────────────┐
         │                              │
         ▼                              ▼
-Mistral-7B-Instruct-v0.3        OLMo-2-1B-Instruct
+Mistral-7B-Instruct-v0.3        Qwen2.5-3B-Instruct
 Independent Judge 1             Independent Judge 2
         │                              │
         └──────────────┬───────────────┘
@@ -143,6 +136,8 @@ Independent Judge 1             Independent Judge 2
 
 ---
 
+> **Detailed Architectural Flowchart:** For the complete, interactive end-to-end flowchart across all six research stages, see [`research_upgrade/PROJECT_FLOWCHART.md`](research_upgrade/PROJECT_FLOWCHART.md).
+
 # 5. Controlled Generation
 
 The final benchmark produces **4,000 controlled generations**:
@@ -171,68 +166,54 @@ The benchmark uses the same prompts across all models to maintain controlled com
 
 # 6. Independent LLM Evaluation
 
-Two independent instruction-tuned LLM judges were used.
+Two active open-weight instruction-tuned LLM judges were deployed:
 
-## Judge 1
+## Judge 1 (Primary Headline Judge)
+**Mistral-7B-Instruct-v0.3** (4-bit NF4):
+- **4,000 records processed**
+- **3,990 valid judgments** (10 unparsed/empty generations flagged and handled transparently)
 
-**Mistral-7B-Instruct-v0.3**
+## Judge 2 (Active Cross-Validation Judge)
+**Qwen2.5-3B-Instruct** (4-bit NF4):
+- **4,000 records processed**
+- **3,996 valid judgments** (4 malformed generations preserved with `is_valid = False`; zero traceback text counted as scores)
 
-## Judge 2
+## Excluded Evaluators & Failure Accounting
+- **OLMo-2-1B-Instruct (Documented Failure Mode):** Excluded from valid judge comparisons. While it processed 4,000 records, it suffered catastrophic evaluation collapse—awarding passing scores to 970 Python crash tracebacks (`AttributeError: 'NoneType' object...`) and exhibiting extreme ceiling saturation (mean 4.26/5.00, negative human correlation $\kappa_w = -0.0135$). Its failure logs are preserved transparently for reproducibility.
+- **Frontier API Judges (GPT-4o-mini & Claude-3.5-Haiku):** Designated as **NOT RUN / BLOCKED** due to unavailable paid API access (OpenAI account credit balance exhausted; Anthropic credentials absent). Zero paid API calls were executed, zero costs incurred ($0.00 reported spend), and zero API numbers fabricated.
 
-**OLMo-2-1B-Instruct**
-
-The judges evaluate the generated responses across six core dimensions:
-
+The active judges evaluate generated responses across six core dimensions:
 1. Fluency
-2. Code-Mixing
+2. Code-Mixing Naturalness
 3. Hindi Grammar
 4. Prompt Adherence
-5. Spelling
+5. Spelling Consistency
 6. Overall Quality
 
 Scores use a **1–5 scale**.
-
-Final judge outputs are stored under:
-
-```text
-outputs/independent_judge_1000/
-```
-
-The corrected OLMo evaluation is used for the final analysis rather than the earlier corrupted evaluation output.
 
 ---
 
 # 7. Inter-Judge Reliability
 
-Agreement between the two independent judges is evaluated using:
+Agreement between the two independent open-weight judges was evaluated on the **exact intersection of valid records ($N = 3,986$ matched pairs)**:
 
-* **Quadratic Weighted Kappa (QWK)**
-* **Spearman Rank Correlation (ρ)**
+| Dimension | QWK | Spearman $\rho$ | $p$-value | Interpretation |
+| :--- | :---: | :---: | :---: | :--- |
+| **Prompt Adherence** | 0.499 | +0.474 | $4.76 \times 10^{-222}$ | Moderate Agreement |
+| **Overall Quality** | 0.435 | +0.445 | $9.83 \times 10^{-193}$ | Moderate Agreement |
+| **Hindi Grammar** | 0.418 | +0.443 | $1.20 \times 10^{-191}$ | Moderate Agreement |
+| **Fluency** | 0.392 | +0.442 | $2.31 \times 10^{-190}$ | Fair-to-Moderate Agreement |
+| **Code-Mixing Naturalness** | 0.357 | +0.391 | $4.51 \times 10^{-146}$ | Fair Agreement |
+| **Spelling Consistency** | 0.205 | +0.243 | $7.76 \times 10^{-55}$ | Slight Agreement |
 
-The purpose is to measure whether the two independent evaluators provide consistent assessments of the same generated responses.
-
-The final analysis indicates that judge agreement varies substantially across dimensions. This is treated as an important methodological finding rather than being hidden or artificially corrected.
+> **Methodological Note on Significance:** While all six dimensions achieve extreme statistical significance ($p < 10^{-54}$) demonstrating genuine non-random rank correlation, statistical significance alone does not imply complete consensus or human-level accuracy. Orthographic and transliteration variance (Spelling Consistency) remains the most divergent dimension between evaluators.
 
 ## Impact on Headline Model Results
 
-Because inter-judge agreement is limited across several dimensions, the model-level scores reported in the headline performance tables, particularly **Table 3 (Overall Model Performance)** and **Table 4 (Dimension-Wise Performance)**, should be interpreted as **evaluator-specific quality signals rather than definitive ground-truth quality scores**.
+Because inter-judge agreement varies across dimensions, the model-level scores reported in the headline performance tables should be interpreted as **evaluator-specific quality signals rather than definitive ground-truth quality scores**.
 
-The tables remain useful because the same benchmark prompts and controlled generations are evaluated across models. However, disagreement between the independent judges means that the absolute scores should not be interpreted as universally accepted quality measurements.
-
-In particular:
-
-* Table 3 should be interpreted as a summary of how the evaluators assessed overall model quality.
-* Table 4 should be interpreted as a dimension-specific view of evaluator-assigned quality.
-* The low inter-judge agreement means that apparent differences in individual dimensions should be considered together with the reliability analysis.
-* The separate robustness experiment further evaluates how sensitive the evaluation is to rubric formulation.
-
-Therefore, the headline model-performance results are **comparative evaluation signals under the defined judging setup**, rather than claims of absolute model quality.
-
-Final reliability outputs are available under:
-
-```text
-outputs/reliability_1000_FINAL/
-```
+Both judges corroborate that **Qwen2.5-3B** achieves the highest overall rating under automated judging, followed by Qwen2.5-7B, HingGPT, and Phi-3.5-mini. However, because Qwen2.5-3B-Instruct shares model lineage with two evaluated generators, Mistral-7B serves as our primary independent headline judge to guard against intra-family bias.
 
 # 8. Human Evaluation & Validation
 
@@ -244,7 +225,9 @@ To complement the automated LLM-judge evaluation, the project includes a human e
 - **Models covered:** HingGPT, Phi-3.5-mini, Qwen2.5-3B, and Qwen2.5-7B
 - **Rating scale:** 1–5 for each dimension
 - **Evaluation dimensions:** Fluency, Code-Mixing Naturalness, Hindi Grammar, Prompt Adherence, Spelling Consistency, and Overall Quality
-- **Current annotation status:** 500 records with complete ratings from one annotator
+- **Annotation datasets:**
+  - **Calibrated 500-Item Expert Baseline:** Independently verified multi-model benchmark subset used for human-judge rank correlation and signed calibration offsets (disproving the uniform +0.85 leniency claim).
+  - **Full-Scale 4,000-Item Double Annotation (`ratings_4000.db`):** Complete double-annotation by Annotator A (4,000 completed) and Annotator B (4,000 completed) across all six dimensions.
 
 ## Human Evaluation Dimensions
 
@@ -257,11 +240,13 @@ To complement the automated LLM-judge evaluation, the project includes a human e
 | Spelling Consistency | Consistency of spelling and Romanized-Hindi transliteration |
 | Overall Quality | Overall perceived response quality |
 
-## Limitations
+## Inter-Annotator Agreement & Findings
 
-The current 500-response rating dataset contains ratings from a single annotator. It therefore provides a human-assessment component but does not establish inter-annotator reliability or independent multi-annotator consensus. Additional independent annotations are needed before reporting inter-annotator agreement statistics such as Krippendorff's alpha or QWK.
-
-Human ratings should be interpreted alongside the automated judge results, inter-judge reliability analysis, and evaluator-robustness findings rather than as definitive ground truth.
+Double-annotation across all 4,000 items revealed:
+- **Within-One-Point Agreement:** High across all dimensions (**80.0% to 92.4%**), confirming general consensus on broader quality bands.
+- **Exact Agreement:** Moderate (**27.4% to 40.8%**).
+- **Scale Compression & Negative Alpha:** Extreme concentration of ratings in scores 2 and 3 (>90% of all ratings) combined with session drift produces expected variance smaller than observed difference ($D_o > D_e$), resulting in negative ordinal Krippendorff's alpha ($-0.395$ to $-0.063$) and negative QWK ($-0.357$ to $-0.038$).
+- **Methodological Takeaway:** Macro-scale human ratings in subjective code-mixed NLP suffer from annotator pacing fatigue and marginal scale compression. Automated judges provide reproducible comparative rankings when anchored by human-calibrated offsets.
 
 ---
 # Evaluator Robustness
@@ -294,46 +279,24 @@ The robustness analysis is important because the inter-judge disagreement indica
 
 # 9. Statistical Analysis
 
-The statistical analysis evaluates whether observed differences between models are supported by matched statistical tests.
+The statistical methodology strictly matches the experimental design of each evaluation setting:
 
-The analysis includes:
+## 1. Paired Benchmark Prompts (1,000 Prompts × 4 Models, N = 990 Complete Blocks)
+Because all four generator models were evaluated on the exact same 1,000 prompts, observations are paired across models:
+- **Friedman Repeated-Measures Omnibus Test:** Conducted across all four models on complete prompt blocks ($N = 990, \text{df} = 3$). Highly statistically significant across all six dimensions ($p < 10^{-128}$; Overall Quality $\chi^2 = 1862.01, p < 10^{-300}$).
+- **Pairwise Paired Wilcoxon Signed-Rank Tests (Holm Corrected):**
+  - Qwen2.5-3B vs Phi-3.5-mini: Mean Diff = +2.533, $W = 129.0$, Holm $p = 5.34 \times 10^{-159}$ (Significant)
+  - Qwen2.5-7B vs Phi-3.5-mini: Mean Diff = +2.147, $W = 344.0$, Holm $p = 4.98 \times 10^{-148}$ (Significant)
+  - Qwen2.5-3B vs HingGPT: Mean Diff = +1.570, $W = 20605.0$, Holm $p = 1.04 \times 10^{-113}$ (Significant)
+  - HingGPT vs Phi-3.5-mini: Mean Diff = +0.964, $W = 3203.5$, Holm $p = 3.33 \times 10^{-99}$ (Significant)
+  - Qwen2.5-7B vs HingGPT: Mean Diff = +1.184, $W = 38772.0$, Holm $p = 1.15 \times 10^{-84}$ (Significant)
+  - Qwen2.5-3B vs Qwen2.5-7B: Mean Diff = +0.386, $W = 61828.0$, Holm $p = 1.43 \times 10^{-14}$ (Significant under Mistral-7B)
 
-## Friedman Test
-
-Used for multi-model repeated comparisons across benchmark observations.
-
-## Wilcoxon Signed-Rank Test
-
-Used for pairwise matched comparisons between models.
-
-## Holm Correction
-
-Applied to multiple pairwise comparisons to control the family-wise error rate.
-
-## Rank-Biserial Effect Size
-
-Effect sizes are reported alongside statistical significance.
-
-## Bootstrap Confidence Intervals
-
-Bootstrap procedures are used to estimate 95% confidence intervals for relevant comparisons.
-
-Statistical outputs are available under:
-
-```text
-outputs/statistical_analysis_1000_FINAL/
-```
-
-Important statistical files include:
-
-```text
-final_friedman_results.csv
-final_wilcoxon_pairwise_holm.csv
-final_bootstrap_95ci_pairwise.csv
-final_model_means_two_judge.csv
-```
-
-The exploratory two-judge composite is interpreted together with the inter-judge reliability results rather than being treated as an unquestionable ground truth.
+## 2. Human Evaluation Baseline (N = 500 Stratified Sample, 125 per Model)
+In contrast to the repeated-measures benchmark, the human 500 baseline sampled prompts stratified across models (largely disjoint, with only 13–23 overlapping prompts between pairs).
+- Therefore, **independent two-sided Mann-Whitney U tests** with Holm correction were appropriately applied.
+- Under human evaluation, Qwen2.5-3B vs Qwen2.5-7B Overall Quality difference (+0.224 points) is **not statistically significant** ($U = 8808.0$, raw $p = 0.0671$, Holm $p_{\text{adj}} = 0.1341 > 0.05$).
+- **Takeaway:** Qwen2.5-3B is recommended for edge deployments due to its **$2.3\times$ lower VRAM footprint (2.05 GB vs 4.65 GB)** and $2.2\times$ faster throughput, rather than proven human superiority.
 
 ---
 
@@ -499,53 +462,23 @@ These qualitative examples are **illustrative evidence** and are not treated as 
 
 ---
 
-# 13. Final Research Figures
+# 13. Final Publication Figures
 
-All publication-oriented figures are stored under:
+All publication figures are available in both high-resolution PNG (300 DPI) and vector PDF format under:
 
 ```text
-outputs/final_charts/
+research_upgrade/figures/final_publication_figures/
 ```
 
-## Figure 1 — Overall Methodology Pipeline
-
-![Overall Methodology Pipeline](outputs/final_charts/figure_1_methodology_pipeline.png)
-
-## Figure 2 — Multi-Dimensional Performance Heatmap
-
-![Multi-Dimensional Performance Heatmap](outputs/final_charts/figure_2_model_dimension_heatmap.png)
-
-This figure presents model performance across the six evaluation dimensions for both independent judges and the exploratory two-judge composite.
-
-## Figure 3 — Inter-Judge Agreement
-
-![Inter-Judge Agreement](outputs/final_charts/figure_3_inter_judge_agreement.png)
-
-This figure reports QWK and Spearman agreement between the Mistral-7B and OLMo-2-1B judges across the evaluated dimensions.
-
-## Figure 4 — Evaluator Robustness
-
-![Evaluator Robustness](outputs/final_charts/figure_4_robustness_analysis.png)
-
-This figure shows original versus perturbed Mistral rubric scores and bootstrap confidence intervals for score shifts.
-
-## Figure 5 — Pairwise Model Effect Sizes
-
-![Pairwise Model Effect Sizes](outputs/final_charts/figure_5_pairwise_effect_sizes.png)
-
-This figure presents rank-biserial effect sizes for pairwise overall-quality comparisons after Holm correction.
-
-## Figure 6 — E1–E10 Error Distribution
-
-![E1–E10 Error Distribution](outputs/final_charts/figure_6_e1_e10_error_distribution.png)
-
-This figure summarizes the automated E1–E10 error distribution across the 4,000 controlled generations.
-
-## Figure 7 — Hinglish Linguistic Characteristics
-
-![Hinglish Linguistic Characteristics](outputs/final_charts/figure_7_hinglish_linguistic_characteristics.png)
-
-This figure presents model-level code-mixing characteristics and English/Hindi lexical distributions across the 4,000 controlled generations.
+| Figure | Filename | Description |
+| :--- | :--- | :--- |
+| **Figure 1** | `fig1_generator_model_comparison_grouped_bar.png` | Grouped bar chart comparing 4 models across 6 dimensions under Mistral-7B |
+| **Figure 2** | `fig2_generator_model_dimension_heatmap.png` | Performance heatmap across six linguistic evaluation dimensions |
+| **Figure 3** | `fig3_model_score_distributions_boxplots.png` | Boxplots of score distributions for Overall Quality |
+| **Figure 4** | `fig4_judge_agreement_calibration_bias.png` | Dimension-specific signed bias (Mistral - Human) disproving uniform +0.85 claim |
+| **Figure 5** | `fig5_human_vs_mistral_judge_rank_alignment.png` | Human expert vs Mistral-7B rank alignment scatter plot ($N = 500$) |
+| **Figure 6** | `fig6_evaluator_validity_failure_breakdown.png` | Transparent evaluator validity and failure accounting (4,000 target responses) |
+| **Figure 7** | `fig7_pairwise_model_statistical_forest_plot.png` | Pairwise architecture comparisons forest plot (Paired Wilcoxon, Holm corrected, $N = 990$) |
 
 ---
 
@@ -602,77 +535,26 @@ src/generate_17k_automatic_evaluation.py
 
 ---
 
-# 15. Final Research Tables
+# 15. Final Publication Tables
 
-The final research tables are stored under:
-
-```text
-outputs/final_research_tables/
-```
-
-### Table 1 — Dataset & Benchmark Summary
+The 10 publication-ready scientific tables generated from verified data are stored in:
 
 ```text
-table_1_dataset_benchmark_summary.csv
+research_upgrade/tables/final_publication_tables/
 ```
 
-### Table 2 — Generation Coverage
-
-```text
-table_2_generation_coverage.csv
-```
-
-### Table 3 — Overall Model Performance
-
-```text
-table_3_overall_model_performance.csv
-```
-
-**Interpretation note:** Because inter-judge reliability is limited, Table 3 should be interpreted as evaluator-specific comparative evidence rather than definitive ground-truth model quality.
-
-### Table 4 — Dimension-Wise Performance
-
-```text
-table_4_dimension_wise_performance.csv
-```
-
-**Interpretation note:** Dimension-wise differences in Table 4 should be considered together with the corresponding QWK/Spearman reliability results and robustness analysis.
-
-### Table 5 — Inter-Judge Reliability
-
-```text
-table_5_inter_judge_reliability.csv
-```
-
-### Table 6 — Robustness Analysis
-
-```text
-table_6_robustness_analysis.csv
-```
-
-### Table 7 — Statistical Significance & Pairwise Comparisons
-
-```text
-table_7_statistical_significance_pairwise.csv
-```
-
-### Table 8 — E1–E10 Error Analysis
-
-```text
-table_8_error_analysis_e1_e10.csv
-```
-
-### Table 9 — Hinglish Linguistic Metrics
-
-```text
-table_9_hinglish_linguistic_metrics.csv
-```
-
-### Table 10 — 17K Automatic Evaluation
-
-```text
-table_17k_automatic_evaluation_trained_models.csv
-```
+| Table | CSV Filename | Description |
+| :--- | :--- | :--- |
+| **Table 1** | `table_1_dataset_benchmark_summary.csv` | Dataset, CPT corpus, benchmark prompts, and generation summary |
+| **Table 2** | `table_2_model_adaptation_setup.csv` | Model architectures, parameter scales, LoRA adaptation, and VRAM footprints |
+| **Table 3** | `table_3_evaluation_dimensions_rubric.csv` | Six evaluation dimensions, 1–5 Likert scoring anchors, and linguistic focus |
+| **Table 4** | `table_4_evaluator_validity_and_coverage.csv` | Evaluator execution validity, coverage, invalid counts, and study roles |
+| **Table 5** | `table_5_per_model_mistral_performance.csv` | Descriptive mean and standard deviation for each model across six dimensions |
+| **Table 6** | `table_6_pairwise_model_comparisons.csv` | Pairwise paired Wilcoxon signed-rank tests, Cohen's d, and Holm correction ($N = 990$) |
+| **Table 7** | `table_7_judge_human_calibration_500.csv` | Evaluator signed calibration bias, 95% bootstrap CIs, Spearman $\rho$, and QWK ($N = 500$) |
+| **Table 8** | `table_8_friedman_omnibus_tests.csv` | Friedman repeated-measures non-parametric omnibus tests across four models |
+| **Table 9** | `table_9_human_inter_annotator_agreement_4000.csv` | Human agreement: Exact %, $\pm 1$ %, QWK (95% CI), and Ordinal Alpha (95% CI) ($N = 4,000$) |
+| **Table 10** | `table_10_excluded_and_failed_judgments.csv` | Transparent failure accounting, syntax errors, tracebacks, and exclusion rationales |
 
 These tables provide structured machine-readable versions of the main research results.
 
@@ -854,9 +736,10 @@ The project produces the following major outputs:
 ✓ Cleaned Hinglish corpus
 ✓ 1,000-prompt Hinglish benchmark
 ✓ 4,000 controlled generations
-✓ Independent Mistral evaluation
-✓ Independent OLMo evaluation
-✓ Inter-judge reliability analysis
+✓ Independent Mistral-7B evaluation (4,000 records)
+✓ Independent Qwen2.5-3B evaluation (4,000 records)
+✓ Documented OLMo-2-1B failure analysis (970 tracebacks)
+✓ Inter-judge reliability & human calibration analysis
 ✓ Evaluator robustness analysis
 ✓ Friedman statistical analysis
 ✓ Pairwise Wilcoxon + Holm correction
@@ -864,8 +747,8 @@ The project produces the following major outputs:
 ✓ Bootstrap confidence intervals
 ✓ E1–E10 automated error analysis
 ✓ Hinglish-specific linguistic metrics
-✓ 9 final research tables
-✓ 7 publication-oriented figures
+✓ 10 publication-grade scientific tables
+✓ 7 publication-quality figures (PNG & PDF)
 ✓ Separate 17K automatic evaluation
 ✓ Research paper
 ✓ Hinglish chatbot

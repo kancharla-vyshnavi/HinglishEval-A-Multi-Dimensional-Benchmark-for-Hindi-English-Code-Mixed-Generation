@@ -1,0 +1,7 @@
+dimension,dimension_label,sample_size,human_mean,mistral_mean,mean_bias,bias_ci_95,pearson_r,spearman_rho,qwk
+fluency,Fluency,500,2.626,2.516,-0.11,"[-0.2420, +0.0180]",0.1769,0.1579,0.1706
+code_mixing_naturalness,Code-Mixing,500,2.376,2.826,0.45,"[+0.2980, +0.5940]",0.2155,0.2215,0.1761
+hindi_grammar,Hindi Grammar,500,2.606,2.072,-0.534,"[-0.6520, -0.4140]",0.1388,0.127,0.1223
+prompt_adherence,Prompt Adherence,500,2.316,2.476,0.16,"[+0.0060, +0.3100]",0.1781,0.1914,0.153
+spelling_consistency,Spelling,500,2.5,3.342,0.842,"[+0.6799, +1.0020]",0.1891,0.1754,0.1388
+overall,Overall Quality,500,2.372,2.47,0.098,"[-0.0360, +0.2320]",0.1788,0.1837,0.1691

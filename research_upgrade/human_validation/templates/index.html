@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HinglishEval: Double-Blind Human Evaluation Platform</title>
+  <meta name="description" content="Double-blind human evaluation benchmark system for Hindi-English code-mixed language models.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="brand-section">
+      <span class="brand-badge">Double-Blind Protocol</span>
+      <h1 class="brand-title" id="page-title">HinglishEval Benchmark Evaluation</h1>
+    </div>
+
+    <div class="annotator-info-bar">
+      <div class="annotator-pill" id="annotator-pill" style="display: none;">
+        <span class="dot-status"></span>
+        <span id="annotator-name">Authenticated Annotator</span>
+      </div>
+      <button type="button" class="btn-icon" id="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+        🌓
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- Progress Card -->
+    <section class="progress-card" id="progress-card">
+      <div class="progress-header">
+        <span id="progress-text">Completed: 0 / 500 responses</span>
+        <span id="progress-percent" style="color: var(--accent-secondary); font-weight: 700;">0.0%</span>
+      </div>
+      <div class="progress-track" aria-label="Annotation Progress">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </section>
+
+    <!-- Quick Navigation & Filter Bar -->
+    <nav class="jump-bar" id="jump-bar">
+      <div class="jump-group">
+        <label for="jump-input" style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Jump to Item:</label>
+        <input type="number" id="jump-input" class="jump-input" min="1" max="500" value="1" placeholder="1-500">
+        <button type="button" class="btn-secondary" id="jump-btn" style="padding:0.45rem 0.85rem;">Go</button>
+      </div>
+
+      <div class="jump-group">
+        <button type="button" class="btn-secondary" id="next-unanswered-btn" style="color:var(--accent-secondary); font-weight:600;">
+          ⚡ Jump to Next Unanswered
+        </button>
+      </div>
+    </nav>
+
+    <!-- Evaluation View: Split Stimulus & Scoring Card -->
+    <div class="evaluation-grid" id="eval-view">
+      
+      <!-- Stimulus Side (Blinded) -->
+      <article class="stimulus-card" id="stimulus-card">
+        <div class="stimulus-header">
+          <span class="item-index-badge" id="item-index-badge">Response #1 of 500</span>
+          <span class="status-badge unrated" id="item-status-badge">Unrated</span>
+        </div>
+
+        <!-- Optional Source Text -->
+        <div class="prompt-box" id="source-text-box" style="display: none;">
+          <div class="box-label">Original Source Utterance (Hinglish Dataset)</div>
+          <div class="box-content" id="source-text-content"></div>
+        </div>
+
+        <!-- Full User Prompt -->
+        <div class="prompt-box" id="prompt-box">
+          <div class="box-label">Full Benchmark Prompt</div>
+          <div class="box-content" id="prompt-content">Loading benchmark prompt...</div>
+        </div>
+
+        <!-- Model Generated Response (Blinded) -->
+        <div class="response-box" id="response-box">
+          <div class="box-label" style="color:var(--accent-secondary);">Generated Response (Model Identity Hidden)</div>
+          <div class="response-content" id="response-content">Loading generated response...</div>
+        </div>
+      </article>
+
+      <!-- Scoring Side -->
+      <section class="scoring-card" id="scoring-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="font-size:1.15rem; font-weight:700;">Rate Response (1 to 5 Scale)</h2>
+          <span style="font-size:0.75rem; color:var(--text-subtle);">All 6 dimensions required</span>
+        </div>
+
+        <!-- 6 Dimensions Dynamic Container -->
+        <div class="dimensions-list" id="dimensions-container">
+          <!-- Rendered via JavaScript -->
+        </div>
+
+        <!-- Qualitative Notes -->
+        <div class="notes-group">
+          <label for="notes-textarea">Qualitative Notes / Linguistic Peculiarities (Optional):</label>
+          <textarea id="notes-textarea" class="notes-textarea" placeholder="E.g., noticeable grammatical error in postposition, awkward transliteration, or unnatural switching..."></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-bar">
+          <button type="button" class="btn-secondary" id="prev-btn" disabled>
+            ◀ Previous
+          </button>
+          
+          <button type="button" class="btn-primary" id="save-next-btn" disabled>
+            Save & Next ➔
+          </button>
+        </div>
+
+        <div style="font-size:0.75rem; color:var(--text-subtle); text-align:center; margin-top:0.25rem;">
+          Shortcuts: <kbd>Alt+S</kbd> Save & Next &bull; <kbd>Alt+P</kbd> Previous &bull; <kbd>Alt+U</kbd> Next Unanswered
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Admin & Oversight View (For Project Lead) -->
+    <section class="scoring-card" id="admin-view" style="display: none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:1rem;">
+        <div>
+          <h2 style="font-size:1.3rem; font-weight:800;">Human Evaluation Administrative Oversight</h2>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Real-time monitoring across Annotator A and Annotator B partitions.</p>
+        </div>
+        <button type="button" class="btn-primary" id="export-btn">
+          Export Combined Dataset & Validation Report
+        </button>
+      </div>
+
+      <div class="admin-grid" id="admin-overview-container" style="margin-top:1.25rem;">
+        <!-- Filled dynamically -->
+      </div>
+
+      <div id="export-status"></div>
+    </section>
+
+  </main>
+
+  <!-- Token Authentication Modal -->
+  <div class="modal-overlay" id="auth-modal" style="display: none;">
+    <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-heading">
+      <div class="auth-header">
+        <h2 id="auth-heading">HinglishEval Evaluator Access</h2>
+        <p>Please enter your secure access token to open your assigned 500 response evaluation partition.</p>
+      </div>
+
+      <div class="token-input-group">
+        <label for="token-input">Evaluator Access Token</label>
+        <input type="password" id="token-input" class="text-input" placeholder="e.g., eval_a_lead_2026 or eval_b_partner_2026" autocomplete="current-password">
+      </div>
+
+      <button type="button" class="btn-primary" id="login-btn">
+        Authenticate & Begin Evaluation
+      </button>
+
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:8px; font-size:0.8rem; color:var(--text-muted); line-height:1.5;">
+        <strong>Notice:</strong> Model identities, AI judge ratings, and the other evaluator's submissions are strictly blinded to protect empirical benchmark validity.
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+Model,Base_Model,Param_Scale,Architecture,Pretraining,Adaptation,Trainable_Params,VRAM_Footprint_GB
+HingGPT,HingGPT-124M,124M,Causal Decoder (GPT-2),Hinglish Tweets (L3Cube),None (Base Benchmark),0,0.45 GB
+Phi-3.5-mini,microsoft/Phi-3.5-mini-instruct,3.82B,Dense Transformer,Synthetic / Multilingual Web,None (Base Benchmark),0,2.40 GB
+Qwen2.5-3B,Qwen/Qwen2.5-3B,3.09B,Dense Transformer (GQA),Multilingual 18T tokens,"4-bit QLoRA (r=8, alpha=16, 17.3k steps)","8,257,536 (0.268%)",2.05 GB
+Qwen2.5-7B,Qwen/Qwen2.5-7B,7.61B,Dense Transformer (GQA),Multilingual 18T tokens,"4-bit QLoRA (r=8, alpha=16, 17.3k steps)","20,447,232 (0.269%)",4.65 GB

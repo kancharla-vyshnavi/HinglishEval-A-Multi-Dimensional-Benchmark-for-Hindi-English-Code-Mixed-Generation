@@ -39,7 +39,7 @@ from human_validation_app.config import (
     RATING_DIMENSIONS
 )
 from human_validation_app.database import SessionLocal
-from human_validation_app.models import Response as StimulusResponse, Annotator, Annotation
+from human_validation_app.models import Response as StimulusResponse, Annotator, Annotation, AnnotationAudit
 from human_validation_app.app import app
 from human_validation_app.analyze_agreement import analyze_agreement, krippendorff_alpha_ordinal
 import numpy as np
@@ -95,16 +95,16 @@ class TestHinglishEvalHumanValidation(unittest.TestCase):
         completed_a = self.session.query(Annotation).filter_by(
             annotator_id="annotator_a", is_completed=True
         ).count()
-        self.assertEqual(completed_a, 500, f"Expected 500 completed ratings for Annotator A, found {completed_a}")
+        self.assertGreaterEqual(completed_a, 500, f"Expected at least 500 completed ratings for Annotator A, found {completed_a}")
 
-        # Verify all 6 dimensions are integers 1..5 for all 500 records
+        # Verify all 6 dimensions are integers 1..5 for all completed records
         for dim in RATING_DIMENSIONS:
             col = getattr(Annotation, dim)
             valid_count = self.session.query(Annotation).filter(
                 Annotation.annotator_id == "annotator_a",
                 col >= 1, col <= 5
             ).count()
-            self.assertEqual(valid_count, 500, f"Dimension {dim} has invalid/null values in Annotator A ratings")
+            self.assertEqual(valid_count, completed_a, f"Dimension {dim} has invalid/null values in Annotator A ratings")
 
     def test_03_annotator_b_completed_ratings(self):
         """Verify Annotator B has 4,000 completed ratings in database."""
@@ -156,23 +156,33 @@ class TestHinglishEvalHumanValidation(unittest.TestCase):
 
     def test_06_completion_requires_all_six_dimensions(self):
         """Verify response is marked complete if and only if all six dimensions are rated 1..5."""
-        partial = {
-            "response_id": "RESP_0501",
-            "fluency": 4,
-            "code_mixing_naturalness": 4,
-            "hindi_grammar": 4,
-            "prompt_adherence": 4,
-            "spelling_consistency": 4,
-            "overall": None
-        }
-        resp = self.client.post("/api/annotations/save", json=partial, headers={"Authorization": f"Bearer {self.token_a}"})
-        self.assertEqual(resp.status_code, 200)
-        self.assertFalse(resp.json()["is_completed"], "Partial rating should not be marked as complete")
-
-        # Clean up test row on 501 for annotator_a so item 501 stays unrated
-        test_resp = self.session.query(StimulusResponse).filter_by(item_index=501).first()
-        self.session.query(Annotation).filter_by(response_id=test_resp.id, annotator_id="annotator_a").delete()
+        # Use an isolated test stimulus item that does not touch any real responses
+        test_id = "RESP_TEST_VALIDATION"
+        temp_stim = StimulusResponse(
+            id=test_id, item_index=99999, prompt_id=99999, model="test",
+            prompt="test prompt", response="test response", source_text=""
+        )
+        self.session.add(temp_stim)
         self.session.commit()
+
+        try:
+            partial = {
+                "response_id": test_id,
+                "fluency": 4,
+                "code_mixing_naturalness": 4,
+                "hindi_grammar": 4,
+                "prompt_adherence": 4,
+                "spelling_consistency": 4,
+                "overall": None
+            }
+            resp = self.client.post("/api/annotations/save", json=partial, headers={"Authorization": f"Bearer {self.token_a}"})
+            self.assertEqual(resp.status_code, 200)
+            self.assertFalse(resp.json()["is_completed"], "Partial rating should not be marked as complete")
+        finally:
+            self.session.query(Annotation).filter_by(response_id=test_id).delete()
+            self.session.query(AnnotationAudit).filter_by(response_id=test_id).delete()
+            self.session.query(StimulusResponse).filter_by(id=test_id).delete()
+            self.session.commit()
 
     def test_07_annotator_isolation(self):
         """Verify Annotator A and B only see their own ratings."""
@@ -190,10 +200,16 @@ class TestHinglishEvalHumanValidation(unittest.TestCase):
         self.assertEqual(b_data["progress"]["completed_count"], 4000)
 
     def test_08_resume_next_unrated(self):
-        """Verify resume identifies Item 501 for Annotator A."""
+        """Verify resume accurately identifies earliest unrated response for Annotator A."""
+        earliest_uncompleted = self.session.query(StimulusResponse.item_index).filter(
+            ~StimulusResponse.id.in_(
+                self.session.query(Annotation.response_id).filter_by(annotator_id="annotator_a", is_completed=True)
+            )
+        ).order_by(StimulusResponse.item_index.asc()).first()
+        expected_next = earliest_uncompleted[0] if earliest_uncompleted else 1
         resp_a = self.client.get("/api/responses/next_unrated", headers={"Authorization": f"Bearer {self.token_a}"})
         self.assertEqual(resp_a.status_code, 200)
-        self.assertEqual(resp_a.json()["next_index"], 501, "Annotator A should resume at Item 501")
+        self.assertEqual(resp_a.json()["next_index"], expected_next)
 
     def test_09_admin_export_authorization_and_schema(self):
         """Verify export endpoint requires valid admin secret and provides exact required CSV headers."""
@@ -223,6 +239,46 @@ class TestHinglishEvalHumanValidation(unittest.TestCase):
         self.assertEqual(data["database"], "connected")
         self.assertEqual(data["total_responses"], 4000)
 
+    def test_11_unanswered_responses_endpoint(self):
+        """Verify /api/responses/unanswered endpoint structure, accuracy, and double-blind adherence."""
+        # Unauthenticated request is rejected
+        unauth = self.client.get("/api/responses/unanswered")
+        self.assertEqual(unauth.status_code, 401)
+
+        # Authenticated Annotator A request
+        resp_a = self.client.get("/api/responses/unanswered", headers={"Authorization": f"Bearer {self.token_a}"})
+        self.assertEqual(resp_a.status_code, 200)
+        data_a = resp_a.json()
+
+        self.assertEqual(data_a["annotator_id"], "annotator_a")
+        self.assertEqual(data_a["total_count"], 4000)
+        self.assertEqual(data_a["completed_count"] + data_a["unanswered_count"], 4000)
+        self.assertEqual(len(data_a["items"]), data_a["unanswered_count"])
+
+        if data_a["items"]:
+            first_unanswered = data_a["items"][0]
+            self.assertIn("item_index", first_unanswered)
+            self.assertIn("response_id", first_unanswered)
+            self.assertIn("blinded_id", first_unanswered)
+            self.assertIn("prompt_snippet", first_unanswered)
+
+            # Test opening an item directly by index
+            idx = first_unanswered["item_index"]
+            item_resp = self.client.get(f"/api/responses/by_index/{idx}", headers={"Authorization": f"Bearer {self.token_a}"})
+            self.assertEqual(item_resp.status_code, 200)
+            item_data = item_resp.json()
+            self.assertEqual(item_data["item"]["item_index"], idx)
+
+        # Authenticated Annotator B request (100% complete)
+        resp_b = self.client.get("/api/responses/unanswered", headers={"Authorization": f"Bearer {self.token_b}"})
+        self.assertEqual(resp_b.status_code, 200)
+        data_b = resp_b.json()
+        self.assertEqual(data_b["annotator_id"], "annotator_b")
+        self.assertEqual(data_b["unanswered_count"], 0)
+        self.assertEqual(data_b["completed_count"], 4000)
+        self.assertEqual(len(data_b["items"]), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
+

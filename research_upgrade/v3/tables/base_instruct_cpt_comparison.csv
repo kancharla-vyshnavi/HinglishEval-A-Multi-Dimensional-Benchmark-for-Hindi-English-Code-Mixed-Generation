@@ -1,0 +1,7 @@
+model_family,variant,checkpoint_identifier,adaptation_status,eval_sample,cross_entropy_loss_nats,perplexity,inference_throughput_tok_per_sec,vram_gb_4bit,status
+Qwen2.5-3B,Base,Qwen/Qwen2.5-3B,Unadapted Base,100 validation sequences,5.0432,154.97,403.1,2.07,COMPLETED
+Qwen2.5-3B,Instruct,Qwen/Qwen2.5-3B-Instruct,General Instruction Tuned,100 validation sequences,5.2363,187.97,440.5,2.07,COMPLETED
+Qwen2.5-3B,CPT,models/qwen25_3b_cpt/checkpoint-17340,Domain Continued Pretrained (LoRA r=8),100 validation sequences,4.0566,57.78,335.1,2.07,COMPLETED
+HingGPT,Base / CPT,models/hinggpt_cpt/checkpoint-17340,Domain CPT (GPT-2 architecture),"Full 14,601 validation corpus",5.143,171.23,482.0,0.85,COMPLETED
+Phi-3.5-mini,CPT,models/phi35_mini_cpt/checkpoint-17340,Domain CPT (LoRA r=8 on Instruct),"Full 14,601 validation corpus",3.9277,50.79,310.4,2.65,COMPLETED
+Qwen2.5-7B,CPT,models/qwen25_7b_cpt/checkpoint-17340,Domain CPT (LoRA r=8),"Full 14,601 validation corpus",4.0097,55.13,218.2,4.65,COMPLETED

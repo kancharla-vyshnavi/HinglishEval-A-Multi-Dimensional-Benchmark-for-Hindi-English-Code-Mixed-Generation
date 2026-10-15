@@ -1,0 +1,5 @@
+﻿model,evaluated_prompts,bpc,cmi_mean,distinct_1,distinct_2,distinct_3,e1_e10_error_rate_pct,mistral_judge_overall_mean,vram_gb_4bit
+Qwen2.5-3B,992,1.482,28.45,0.428,0.781,0.912,14.8,3.568,2.07
+Qwen2.5-7B,992,1.498,27.12,0.415,0.764,0.898,28.4,3.128,4.65
+Phi-3.5-mini,992,1.842,19.34,0.284,0.512,0.638,84.6,1.032,2.45
+HingGPT,992,2.415,15.62,0.312,0.548,0.684,46.2,2.152,0.85

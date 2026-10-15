@@ -1,8 +1,8 @@
 # HinglishEval: Human Evaluation Validation Report
 
-**Audit Timestamp:** `2026-10-13 18:00:30 UTC`  
-**Database Source:** [`ratings.db`](file:///C:/Users/vyshu/OneDrive/Desktop/HinglishLLM/research_upgrade/human_validation/ratings.db)  
-**Assignment Manifest:** [`assignment_manifest.csv`](file:///C:/Users/vyshu/OneDrive/Desktop/HinglishLLM/research_upgrade/human_validation/assignment_manifest.csv)  
+**Audit Timestamp:** `2026-10-13 18:00:30 UTC`
+**Database Source:** [`ratings.db`](file:///C:/Users/vyshu/OneDrive/Desktop/HinglishLLM/research_upgrade/human_validation/ratings.db)
+**Assignment Manifest:** [`assignment_manifest.csv`](file:///C:/Users/vyshu/OneDrive/Desktop/HinglishLLM/research_upgrade/human_validation/assignment_manifest.csv)
 
 ---
 

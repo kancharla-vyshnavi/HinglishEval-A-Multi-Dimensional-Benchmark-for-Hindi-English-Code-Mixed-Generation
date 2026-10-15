@@ -1,0 +1,4 @@
+LoRA_Rank_r,LoRA_Alpha,Trainable_LoRA_Params,Base_Model_Params,Trainable_Param_Percentage,Adapter_Weight_Memory_MB,Gradient_Memory_MB,Optimizer_State_AdamW_MB,Feasibility_on_6GB_VRAM
+8,16,8257536,3086000000,0.2676,15.75,31.5,126.0,Feasible (QLoRA 4-bit)
+16,32,16515072,3086000000,0.5352,31.5,63.0,252.0,Feasible (QLoRA 4-bit)
+64,128,66060288,3086000000,2.1406,126.0,252.0,1008.0,Feasible (QLoRA 4-bit)

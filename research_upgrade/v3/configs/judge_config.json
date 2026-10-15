@@ -1,0 +1,80 @@
+{
+  "project": "HinglishEval",
+  "version": "v3",
+  "active_evaluation_protocol": "dual_open_weights_evaluators",
+  "active_judges": [
+    {
+      "judge_id": "judge_mistral_7b",
+      "model_identifier": "mistralai/Mistral-7B-Instruct-v0.3",
+      "provider": "mistralai",
+      "family": "Mistral Open-Weights",
+      "precision": "4-bit NormalFloat (NF4)",
+      "status": "COMPLETED",
+      "records_completed": 4000,
+      "valid_records": 4000,
+      "role": "Primary Headline Evaluator"
+    },
+    {
+      "judge_id": "judge_qwen_3b",
+      "model_identifier": "Qwen/Qwen2.5-3B-Instruct",
+      "provider": "qwen",
+      "family": "Qwen Open-Weights",
+      "precision": "4-bit NormalFloat (NF4)",
+      "status": "COMPLETED_OR_IN_PROGRESS",
+      "records_target": 4000,
+      "role": "Secondary Cross-Validation Evaluator"
+    }
+  ],
+  "judges": [
+    {
+      "judge_id": "judge_openai_gpt4o_mini",
+      "provider": "openai",
+      "model_identifier": "gpt-4o-mini-2024-07-18",
+      "family": "OpenAI GPT",
+      "api_key_env_var": "OPENAI_API_KEY",
+      "temperature": 0.0,
+      "max_tokens": 512,
+      "pricing_source_date": "2024-10-01 (Official OpenAI Pricing)",
+      "cost_per_million_input_tokens_usd": 0.15,
+      "cost_per_million_output_tokens_usd": 0.60,
+      "status": "NOT_RUN",
+      "reason": "API quota and credential limitations (RateLimitError 429 credit_balance_exhausted)"
+    },
+    {
+      "judge_id": "judge_anthropic_claude35_haiku",
+      "provider": "anthropic",
+      "model_identifier": "claude-3-5-haiku-20241022",
+      "family": "Anthropic Claude",
+      "api_key_env_var": "ANTHROPIC_API_KEY",
+      "temperature": 0.0,
+      "max_tokens": 512,
+      "pricing_source_date": "2024-10-22 (Official Anthropic Pricing)",
+      "cost_per_million_input_tokens_usd": 0.80,
+      "cost_per_million_output_tokens_usd": 4.00,
+      "status": "NOT_RUN",
+      "reason": "API credential limitation (ANTHROPIC_API_KEY unset)"
+    }
+  ],
+  "excluded_judges": [
+    {
+      "judge_id": "judge_olmo2_1b",
+      "model_identifier": "allenai/OLMo-2-0425-1B-Instruct",
+      "family": "AllenAI OLMo",
+      "status": "EXCLUDED_COLLAPSE",
+      "reason": "Evaluator collapse: produced 970 invalid traceback outputs awarding passing scores to Python exceptions (AttributeError tracebacks); failure logs preserved for transparent reproducibility"
+    }
+  ],
+  "scoring_dimensions": [
+    "fluency",
+    "code_mixing_naturalness",
+    "hindi_grammar",
+    "prompt_adherence",
+    "spelling_consistency",
+    "overall"
+  ],
+  "score_range": [1, 5],
+  "blinding": {
+    "shuffle_seed": 42,
+    "hide_generator_model": true
+  }
+}

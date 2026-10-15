@@ -1,0 +1,25 @@
+﻿dimension,dimension_display,model,n_evaluated,mean,std,median,iqr,ci_95_lower,ci_95_upper
+fluency,Fluency,Qwen2.5-3B,125,2.912,0.862,3.0,0.0,2.76,3.064
+fluency,Fluency,Qwen2.5-7B,125,2.72,1.005,3.0,1.0,2.544,2.896
+fluency,Fluency,Phi-3.5-mini,125,2.384,1.038,3.0,2.0,2.2,2.56
+fluency,Fluency,HingGPT,125,2.488,1.06,3.0,1.0,2.304,2.672
+code_mixing_naturalness,Code-Mixing,Qwen2.5-3B,125,2.664,0.832,3.0,1.0,2.52,2.808
+code_mixing_naturalness,Code-Mixing,Qwen2.5-7B,125,2.488,0.876,2.0,1.0,2.336,2.648
+code_mixing_naturalness,Code-Mixing,Phi-3.5-mini,125,2.104,0.94,2.0,2.0,1.944,2.264
+code_mixing_naturalness,Code-Mixing,HingGPT,125,2.248,0.947,2.0,1.0,2.08,2.416
+hindi_grammar,Hindi Grammar,Qwen2.5-3B,125,2.904,0.875,3.0,1.0,2.752,3.056
+hindi_grammar,Hindi Grammar,Qwen2.5-7B,125,2.624,0.973,3.0,1.0,2.456,2.792
+hindi_grammar,Hindi Grammar,Phi-3.5-mini,125,2.328,1.022,2.0,2.0,2.152,2.504
+hindi_grammar,Hindi Grammar,HingGPT,125,2.568,1.073,3.0,1.0,2.384,2.752
+prompt_adherence,Prompt Adherence,Qwen2.5-3B,125,2.568,0.874,2.0,1.0,2.416,2.72
+prompt_adherence,Prompt Adherence,Qwen2.5-7B,125,2.472,0.955,2.0,1.0,2.312,2.64
+prompt_adherence,Prompt Adherence,Phi-3.5-mini,125,2.088,0.916,2.0,2.0,1.928,2.248
+prompt_adherence,Prompt Adherence,HingGPT,125,2.136,0.883,2.0,1.0,1.984,2.296
+spelling_consistency,Spelling Consistency,Qwen2.5-3B,125,2.8,0.925,3.0,1.0,2.632,2.96
+spelling_consistency,Spelling Consistency,Qwen2.5-7B,125,2.552,0.929,3.0,1.0,2.384,2.712
+spelling_consistency,Spelling Consistency,Phi-3.5-mini,125,2.24,0.995,2.0,2.0,2.072,2.416
+spelling_consistency,Spelling Consistency,HingGPT,125,2.408,1.063,3.0,2.0,2.224,2.592
+overall,Overall Quality,Qwen2.5-3B,125,2.704,0.959,3.0,1.0,2.536,2.872
+overall,Overall Quality,Qwen2.5-7B,125,2.48,0.989,2.0,1.0,2.304,2.648
+overall,Overall Quality,Phi-3.5-mini,125,2.112,0.961,2.0,2.0,1.952,2.28
+overall,Overall Quality,HingGPT,125,2.192,0.904,2.0,1.0,2.032,2.352

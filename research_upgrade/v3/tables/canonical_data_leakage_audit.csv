@@ -1,0 +1,6 @@
+﻿category,count,pct,status
+Exact Match (J = 1.0),0,0.0,Passed - Zero exact contamination
+High Overlap (0.90 <= J < 1.0),0,0.0,Passed - Zero high overlap
+Moderate Overlap (0.80 <= J < 0.90),8,0.8,Filtered - Excluded from v3 benchmark
+Leakage-Free Prompts (J < 0.80),992,99.2,Retained - Official Leakage-Free Benchmark
+Total Audited Prompts,1000,100.0,Comprehensive Jaccard n-gram scan complete

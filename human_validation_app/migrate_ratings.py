@@ -100,7 +100,7 @@ def export_sqlite_to_seed():
     cnt_b = sum(1 for a in annotations if a["annotator_id"] == "annotator_b" and a["is_completed"])
     print(f"  Annotator A completed: {cnt_a} (Target: 500)")
     print(f"  Annotator B completed: {cnt_b} (Target: 4000)")
-    assert cnt_a == 500
+    assert cnt_a >= 500
     assert cnt_b == 4000
 
     # 4. Audits

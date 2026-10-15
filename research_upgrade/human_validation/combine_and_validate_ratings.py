@@ -98,7 +98,7 @@ def combine_and_validate() -> Dict[str, Any]:
                 if val is None or not isinstance(val, int) or val < 1 or val > 5:
                     is_valid = False
                     break
-            
+
             if is_valid:
                 valid_ratings_count += 1
                 rec["status"] = "completed"
@@ -167,7 +167,7 @@ def combine_and_validate() -> Dict[str, Any]:
 
     # 6. Generate Validation Report
     now_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    
+
     report_lines = [
         "# HinglishEval: Two-Person Human Validation Report (1,000 Responses)",
         "",

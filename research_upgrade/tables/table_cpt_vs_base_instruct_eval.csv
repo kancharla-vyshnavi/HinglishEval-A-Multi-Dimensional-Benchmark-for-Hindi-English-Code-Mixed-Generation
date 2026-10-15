@@ -1,0 +1,4 @@
+Model_Variant,Base_Architecture,Adapter_Checkpoint,Validation_Loss_Nats,Validation_Perplexity,Evaluation_Throughput_tok_s
+Base (Qwen2.5-3B),Qwen/Qwen2.5-3B,None,5.0432,154.97,403.1
+Instruct (Qwen2.5-3B-Instruct),Qwen/Qwen2.5-3B-Instruct,None,5.2363,187.97,440.5
+CPT Adapted (Qwen2.5-3B-CPT),Qwen/Qwen2.5-3B,data/model/qwen25_3b_cpt/checkpoint-17340,4.0566,57.78,335.1

@@ -1,0 +1,7 @@
+Dimension,Scale,Low_Anchor_Score_1,High_Anchor_Score_5,Focus
+Fluency,1 to 5,"Fragmented, stuttering, repetitive tokens or disjointed syntax","Smooth, highly articulate bilingual discourse flow",Syntactic Continuity
+Code-Mixing Naturalness,1 to 5,Word-for-word dictionary substitution or monolingual rewrite,Authentic conversational matrix language frame,Sociolinguistic Authenticity
+Hindi Grammar,1 to 5,Severe gender/tense mismatch or corrupted postpositions,Impeccable Hindi agreement and inflections,Morphosyntax
+Prompt Adherence,1 to 5,"Off-topic rambling, canned refusal, or traceback crash",Directly and constructively addresses user query,Conversational Intent
+Spelling Consistency,1 to 5,Extreme vowel dropping or erratic transliteration chaos,"Clean, standardized, readable Romanized transliteration",Orthography
+Overall Quality,1 to 5,"Unusable, incoherent, or broken output","Publication-quality, natural Hinglish assistant response",Holistic Quality

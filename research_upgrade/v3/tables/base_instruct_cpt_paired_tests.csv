@@ -1,0 +1,7 @@
+metric,model_1,model_2,matched_prompts_n,mean_1,mean_2,mean_diff,wilcoxon_stat,raw_p_value,rank_biserial_effect_size,holm_adjusted_p_value,is_significant_holm_05
+Mistral-7B Overall Judge Score,Qwen2.5-3B,Qwen2.5-7B,66,3.4394,3.197,0.2424,381.0,2.5717e-01,0.1945,2.5717e-01,False
+Mistral-7B Overall Judge Score,Qwen2.5-3B,HingGPT,66,3.4394,1.9848,1.4545,161.5,9.0068e-08,0.8046,1.8014e-07,True
+Mistral-7B Overall Judge Score,Qwen2.5-3B,Phi-3.5-mini,66,3.4394,1.0303,2.4091,0.0,1.1630e-11,1.0,5.8150e-11,True
+Mistral-7B Overall Judge Score,Qwen2.5-7B,HingGPT,66,3.197,1.9848,1.2121,128.0,1.5439e-08,0.8451,6.1756e-08,True
+Mistral-7B Overall Judge Score,Qwen2.5-7B,Phi-3.5-mini,66,3.197,1.0303,2.1667,0.0,4.4130e-12,1.0,2.6478e-11,True
+Mistral-7B Overall Judge Score,HingGPT,Phi-3.5-mini,66,1.9848,1.0303,0.9545,12.0,1.6987e-08,0.9734,6.1756e-08,True

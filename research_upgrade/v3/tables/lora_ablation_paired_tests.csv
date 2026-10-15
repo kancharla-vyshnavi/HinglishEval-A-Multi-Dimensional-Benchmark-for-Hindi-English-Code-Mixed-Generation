@@ -1,0 +1,3 @@
+comparison,model,eval_metric,comparison_status,blocker_reason,parameter_delta,memory_delta_mb
+LoRA r=8 vs LoRA r=16,Qwen2.5-3B,Cross-Entropy / PPL,BLOCKED,r=16 checkpoint training requires 100+ GPU hours on host RTX 4050; only r=8 checkpoint exists,"+8,257,536 params (+0.2676%)",+126.0 MB AdamW state
+LoRA r=8 vs LoRA r=64,Qwen2.5-3B,Cross-Entropy / PPL,BLOCKED,r=64 checkpoint training requires 100+ GPU hours on host RTX 4050; only r=8 checkpoint exists,"+57,802,752 params (+1.8730%)",+882.0 MB AdamW state

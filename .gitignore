@@ -39,3 +39,18 @@ ACTIVE_LINKS.txt
 # Private exports containing annotator evaluations
 human_ratings_*export*.csv
 
+
+# Private human-evaluation data
+research_upgrade/human_validation/annotator_A_pending_ratings.csv
+research_upgrade/human_validation/annotator_A_rating_sheet.csv
+research_upgrade/human_validation/annotator_A_ratings.csv
+research_upgrade/human_validation/assignment_manifest.csv
+research_upgrade/human_validation/assignment_manifest.json
+research_upgrade/human_validation/combined_human_ratings.csv
+research_upgrade/human_validation/combined_human_ratings_1000.csv
+research_upgrade/human_validation/backups/
+research_upgrade/human_validation/bin/
+
+# Archived private annotator data and research backups
+research_upgrade/archive/annotator_b/
+research_upgrade/backups/

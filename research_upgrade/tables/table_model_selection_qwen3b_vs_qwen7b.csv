@@ -1,0 +1,26 @@
+Category,Metric,Qwen2.5-3B,Qwen2.5-7B,Advantage / Direction
+Architecture,Total Parameters,3.09 B,7.61 B,3B: 59.4% smaller footprint
+Architecture,4-bit Model Memory (NF4),2.05 GB,4.65 GB,3B: Runs on consumer 4GB/6GB GPUs
+Architecture,Adapter Weights Size,14.10 MB,19.28 MB,3B: Lighter adapter checkpoint
+Mistral-7B Judge,Fluency,3.533 ± 0.921,3.251 ± 0.991,3B Higher (+0.282)
+Mistral-7B Judge,Code Mixing Naturalness,3.979 ± 1.211,3.682 ± 1.235,3B Higher (+0.297)
+Mistral-7B Judge,Hindi Grammar,2.943 ± 0.954,2.610 ± 0.942,3B Higher (+0.333)
+Mistral-7B Judge,Prompt Adherence,3.741 ± 1.399,3.072 ± 1.531,3B Higher (+0.669)
+Mistral-7B Judge,Spelling Consistency,4.648 ± 0.876,4.664 ± 0.837,7B Higher (+0.016)
+Mistral-7B Judge,Overall,3.563 ± 1.081,3.173 ± 1.139,3B Higher (+0.390)
+Compression / LM,Perplexity (17k validation),74.02,55.13,7B Lower (better LM fit)
+Compression / LM,Bits-per-Character (BPC),2.0013,1.8643,7B Lower BPC (1.6888 vs 1.8153)
+Diversity (K=25),Distinct-1 (Equal Length),0.9093,0.9019,7B Higher lexical diversity
+Diversity (K=25),Repetition Rate (Equal Length),0.0847,0.0981,7B Lower repetition (0.061 vs 0.088)
+Code-Mixing Index,Das & Gambäck CMI (HingBERT-LID),16.78%,12.93%,3B More balanced code-mixing
+Code-Mixing Index,Language Switching Frequency,4.31,4.20,3B Higher conversational switching
+Error Taxonomy,E1: E1 English dominant,19,30,Fewer errors on 3B
+Error Taxonomy,E2: E2 Hindi dominant,180,151,Fewer errors on 7B
+Error Taxonomy,E3: E3 Unnatural code switching,10,6,Fewer errors on 7B
+Error Taxonomy,E4: E4 Grammatical error,68,45,Fewer errors on 7B
+Error Taxonomy,E5: E5 Repetition,41,48,Fewer errors on 3B
+Error Taxonomy,E6: E6 Prompt misunderstanding,215,323,Fewer errors on 3B
+Error Taxonomy,E7: E7 Incomplete response,106,135,Fewer errors on 3B
+Error Taxonomy,E8: E8 Spelling transliteration error,114,71,Fewer errors on 7B
+Error Taxonomy,E9: E9 Hallucination factual error,0,0,Fewer errors on Tied
+Error Taxonomy,E10: E10 Irrelevant response,91,23,Fewer errors on 7B

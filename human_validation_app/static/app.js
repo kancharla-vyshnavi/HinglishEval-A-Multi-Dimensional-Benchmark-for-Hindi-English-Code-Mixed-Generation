@@ -15,7 +15,9 @@
     totalItems: 4000,
     saveTimeout: null,
     hasPendingChanges: false,
-    isSaving: false
+    isSaving: false,
+    unansweredData: null,
+    unansweredFilterText: ""
   };
 
   // DOM Elements
@@ -26,7 +28,7 @@
     accessCodeInput: document.getElementById("access-code-input"),
     loginError: document.getElementById("login-error"),
     loginSubmitBtn: document.getElementById("login-submit-btn"),
-    
+
     annotatorPill: document.getElementById("annotator-pill"),
     annotatorLabel: document.getElementById("annotator-label"),
     logoutBtn: document.getElementById("logout-btn"),
@@ -35,27 +37,45 @@
     rubricModal: document.getElementById("rubric-modal"),
     closeRubricBtn: document.getElementById("close-rubric-btn"),
     dismissRubricBtn: document.getElementById("dismiss-rubric-btn"),
-    
+
     progressText: document.getElementById("progress-text"),
     progressPercent: document.getElementById("progress-percent"),
     progressFill: document.getElementById("progress-fill"),
+    unansweredPill: document.getElementById("unanswered-pill"),
+    unansweredPillCount: document.getElementById("unanswered-pill-count"),
     jumpIndexInput: document.getElementById("jump-index-input"),
     jumpGoBtn: document.getElementById("jump-go-btn"),
     resumeUnratedBtn: document.getElementById("resume-unrated-btn"),
-    
+    unansweredModalBtn: document.getElementById("unanswered-modal-btn"),
+    unansweredCountBadge: document.getElementById("unanswered-count-badge"),
+
+    // Unanswered Modal Elements
+    unansweredModal: document.getElementById("unanswered-modal"),
+    closeUnansweredBtn: document.getElementById("close-unanswered-btn"),
+    dismissUnansweredBtn: document.getElementById("dismiss-unanswered-btn"),
+    modalStatCompleted: document.getElementById("modal-stat-completed"),
+    modalStatUnanswered: document.getElementById("modal-stat-unanswered"),
+    modalStatTotal: document.getElementById("modal-stat-total"),
+    modalStatPercent: document.getElementById("modal-stat-percent"),
+    unansweredSearchInput: document.getElementById("unanswered-search-input"),
+    clearSearchBtn: document.getElementById("clear-search-btn"),
+    searchMetaText: document.getElementById("search-meta-text"),
+    unansweredListContainer: document.getElementById("unanswered-list-container"),
+
     itemBadge: document.getElementById("item-badge"),
     completionBadge: document.getElementById("completion-badge"),
     sourceBox: document.getElementById("source-box"),
     sourceTextContent: document.getElementById("source-text-content"),
     promptContent: document.getElementById("prompt-content"),
     responseContent: document.getElementById("response-content"),
-    
+
     saveStatusBadge: document.getElementById("save-status-badge"),
     saveStatusText: document.getElementById("save-status-text"),
     ratingForm: document.getElementById("rating-form"),
     notesInput: document.getElementById("notes-input"),
     prevItemBtn: document.getElementById("prev-item-btn"),
     saveNextBtn: document.getElementById("save-next-btn"),
+    footerResumeBtn: document.getElementById("footer-resume-btn"),
     navStatusMsg: document.getElementById("nav-status-msg")
   };
 
@@ -150,14 +170,21 @@
     el.appContainer.style.display = "flex";
 
     updateProgressUI(userData.progress);
+    fetchUnansweredItems(false);
 
     // Initial load: either next unrated or item from URL hash
     const hash = window.location.hash.replace("#", "");
     const requestedIndex = parseInt(hash, 10);
-    if (!isNaN(requestedIndex) && requestedIndex >= 1 && requestedIndex <= state.totalItems) {
+    const isCompleted = userData.progress && userData.progress.completed_count >= state.totalItems;
+    const nextUnrated = userData.progress && userData.progress.next_unrated_index ? userData.progress.next_unrated_index : 1;
+
+    if (!isCompleted && requestedIndex === state.totalItems) {
+      // Reached item 4000 earlier but responses remain unanswered -> jump directly to next unrated
+      loadItem(nextUnrated);
+    } else if (!isNaN(requestedIndex) && requestedIndex >= 1 && requestedIndex <= state.totalItems) {
       loadItem(requestedIndex);
-    } else if (userData.progress && userData.progress.next_unrated_index) {
-      loadItem(userData.progress.next_unrated_index);
+    } else if (nextUnrated) {
+      loadItem(nextUnrated);
     } else {
       loadItem(1);
     }
@@ -201,11 +228,24 @@
     if (!prog) return;
     const completed = prog.completed_count || 0;
     const total = prog.total_count || state.totalItems;
+    const unanswered = prog.unanswered_count !== undefined ? prog.unanswered_count : Math.max(0, total - completed);
     const pct = prog.percentage !== undefined ? prog.percentage : ((completed / total) * 100).toFixed(1);
 
     el.progressText.textContent = `${completed.toLocaleString()} / ${total.toLocaleString()} completed`;
     el.progressPercent.textContent = `${pct}%`;
     el.progressFill.style.width = `${pct}%`;
+
+    if (el.unansweredCountBadge) {
+      el.unansweredCountBadge.textContent = unanswered.toLocaleString();
+    }
+    if (el.unansweredPill && el.unansweredPillCount) {
+      el.unansweredPillCount.textContent = unanswered.toLocaleString();
+      el.unansweredPill.style.display = unanswered > 0 ? "inline-flex" : "none";
+    }
+    if (el.modalStatCompleted) el.modalStatCompleted.textContent = completed.toLocaleString();
+    if (el.modalStatUnanswered) el.modalStatUnanswered.textContent = unanswered.toLocaleString();
+    if (el.modalStatTotal) el.modalStatTotal.textContent = total.toLocaleString();
+    if (el.modalStatPercent) el.modalStatPercent.textContent = `${pct}%`;
   }
 
   // --- Stimulus & Annotation Loading ---
@@ -338,6 +378,7 @@
       }
 
       updateProgressUI(res.progress);
+      fetchUnansweredItems(true).catch(() => {});
       return res;
     } catch (err) {
       setSaveStatus("failed", "Save Failed — Click to retry");
@@ -368,6 +409,159 @@
     }
   }
 
+  // --- Unanswered Responses Management ---
+  async function fetchUnansweredItems(renderIfOpen = true) {
+    try {
+      const data = await apiFetch("/api/responses/unanswered");
+      state.unansweredData = data;
+
+      // Update UI stats & badges
+      updateProgressUI({
+        completed_count: data.completed_count,
+        total_count: data.total_count,
+        unanswered_count: data.unanswered_count,
+        percentage: data.percentage
+      });
+
+      if (renderIfOpen && el.unansweredModal && el.unansweredModal.style.display !== "none") {
+        renderUnansweredList();
+      }
+      return data;
+    } catch (err) {
+      console.error("Failed to fetch unanswered items:", err);
+      if (el.searchMetaText) {
+        el.searchMetaText.textContent = `Error loading items: ${err.message}`;
+      }
+    }
+  }
+
+  function renderUnansweredList() {
+    if (!state.unansweredData || !el.unansweredListContainer) return;
+
+    const allItems = state.unansweredData.items || [];
+    const filter = (state.unansweredFilterText || "").trim().toLowerCase();
+
+    // Toggle clear search button
+    if (el.clearSearchBtn) {
+      el.clearSearchBtn.style.display = filter ? "block" : "none";
+    }
+
+    const filtered = filter
+      ? allItems.filter(item => {
+          const idxStr = String(item.item_index);
+          const bId = (item.blinded_id || "").toLowerCase();
+          const rId = (item.response_id || "").toLowerCase();
+          const snip = (item.prompt_snippet || "").toLowerCase();
+          return idxStr.includes(filter) || bId.includes(filter) || rId.includes(filter) || snip.includes(filter);
+        })
+      : allItems;
+
+    if (el.searchMetaText) {
+      if (allItems.length === 0) {
+        el.searchMetaText.textContent = "All 4,000 responses completed!";
+      } else if (filter) {
+        el.searchMetaText.textContent = `Showing ${filtered.length.toLocaleString()} of ${allItems.length.toLocaleString()} unanswered responses`;
+      } else {
+        el.searchMetaText.textContent = `Total unanswered: ${allItems.length.toLocaleString()} responses across benchmark`;
+      }
+    }
+
+    if (allItems.length === 0) {
+      el.unansweredListContainer.innerHTML = `
+        <div class="unanswered-empty-state">
+          <div class="unanswered-empty-icon">🎉</div>
+          <strong>Evaluation Complete!</strong>
+          <span>All 4,000 responses have been evaluated across all six dimensions.</span>
+        </div>
+      `;
+      return;
+    }
+
+    if (filtered.length === 0) {
+      el.unansweredListContainer.innerHTML = `
+        <div class="unanswered-empty-state">
+          <div class="unanswered-empty-icon">🔍</div>
+          <strong>No matches found</strong>
+          <span>No unanswered responses match "${escapeHtml(filter)}".</span>
+        </div>
+      `;
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    filtered.forEach(item => {
+      const row = document.createElement("div");
+      row.className = "unanswered-item-row";
+      row.setAttribute("role", "button");
+      row.setAttribute("tabindex", "0");
+      row.setAttribute("title", `Open Response #${item.item_index}`);
+
+      const infoDiv = document.createElement("div");
+      infoDiv.className = "unanswered-item-info";
+
+      const headerDiv = document.createElement("div");
+      headerDiv.className = "unanswered-item-header";
+
+      const indexSpan = document.createElement("span");
+      indexSpan.className = "unanswered-item-index";
+      indexSpan.textContent = `Item #${item.item_index}`;
+
+      const idSpan = document.createElement("span");
+      idSpan.className = "unanswered-item-id";
+      idSpan.textContent = item.blinded_id || `RESP_${String(item.item_index).padStart(4, '0')}`;
+
+      headerDiv.appendChild(indexSpan);
+      headerDiv.appendChild(idSpan);
+
+      if (item.response_id && item.response_id !== item.blinded_id) {
+        const canonicalSpan = document.createElement("span");
+        canonicalSpan.className = "unanswered-canonical-id";
+        canonicalSpan.textContent = `(${item.response_id})`;
+        headerDiv.appendChild(canonicalSpan);
+      }
+
+      const promptDiv = document.createElement("div");
+      promptDiv.className = "unanswered-prompt-snippet";
+      promptDiv.textContent = item.prompt_snippet || "Prompt stimulus";
+
+      infoDiv.appendChild(headerDiv);
+      infoDiv.appendChild(promptDiv);
+
+      const openBtn = document.createElement("button");
+      openBtn.type = "button";
+      openBtn.className = "btn-small btn-primary open-item-btn";
+      openBtn.textContent = "Open →";
+
+      row.appendChild(infoDiv);
+      row.appendChild(openBtn);
+
+      const handleSelect = () => {
+        el.unansweredModal.style.display = "none";
+        loadItem(item.item_index);
+      };
+
+      row.addEventListener("click", handleSelect);
+      row.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleSelect();
+        }
+      });
+
+      fragment.appendChild(row);
+    });
+
+    el.unansweredListContainer.innerHTML = "";
+    el.unansweredListContainer.appendChild(fragment);
+  }
+
+  function escapeHtml(str) {
+    return (str || "").replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[m]);
+  }
+
   // --- Event Listeners ---
   function setupEventListeners() {
     // Theme toggle
@@ -380,6 +574,55 @@
     el.rubricModal.addEventListener("click", (e) => {
       if (e.target === el.rubricModal) el.rubricModal.style.display = "none";
     });
+
+    // Unanswered Responses modal
+    if (el.unansweredModalBtn) {
+      el.unansweredModalBtn.addEventListener("click", async () => {
+        el.unansweredModal.style.display = "flex";
+        if (!state.unansweredData) {
+          if (el.searchMetaText) el.searchMetaText.textContent = "Loading unanswered items from database...";
+          await fetchUnansweredItems(true);
+        } else {
+          renderUnansweredList();
+          fetchUnansweredItems(true);
+        }
+        if (el.unansweredSearchInput) {
+          el.unansweredSearchInput.focus();
+        }
+      });
+    }
+
+    if (el.closeUnansweredBtn) {
+      el.closeUnansweredBtn.addEventListener("click", () => {
+        el.unansweredModal.style.display = "none";
+      });
+    }
+    if (el.dismissUnansweredBtn) {
+      el.dismissUnansweredBtn.addEventListener("click", () => {
+        el.unansweredModal.style.display = "none";
+      });
+    }
+    if (el.unansweredModal) {
+      el.unansweredModal.addEventListener("click", (e) => {
+        if (e.target === el.unansweredModal) el.unansweredModal.style.display = "none";
+      });
+    }
+
+    if (el.unansweredSearchInput) {
+      el.unansweredSearchInput.addEventListener("input", (e) => {
+        state.unansweredFilterText = e.target.value;
+        renderUnansweredList();
+      });
+    }
+
+    if (el.clearSearchBtn) {
+      el.clearSearchBtn.addEventListener("click", () => {
+        el.unansweredSearchInput.value = "";
+        state.unansweredFilterText = "";
+        renderUnansweredList();
+        el.unansweredSearchInput.focus();
+      });
+    }
 
     // Login
     el.loginForm.addEventListener("submit", (e) => {
@@ -421,11 +664,23 @@
 
     el.saveNextBtn.addEventListener("click", async () => {
       try {
-        await saveCurrentRating();
-        if (state.currentIndex < state.totalItems) {
-          loadItem(state.currentIndex + 1);
+        const res = await saveCurrentRating();
+        const prog = res ? res.progress : (state.currentUser ? state.currentUser.progress : null);
+        const completed = prog ? prog.completed_count : 0;
+        const total = state.totalItems;
+
+        if (completed >= total) {
+          alert("Congratulations! You have completed all 4,000 responses! Evaluation is 100% complete.");
+          return;
+        }
+
+        // If at the end of the item list (index 4,000) but responses remain incomplete:
+        if (state.currentIndex >= total) {
+          const nextUnrated = prog && prog.next_unrated_index ? prog.next_unrated_index : 1;
+          alert(`Item #${state.currentIndex} saved! You have reached Item 4,000, but ${total - completed} responses remain unanswered. Jumping to your next unanswered response (#${nextUnrated})...`);
+          loadItem(nextUnrated);
         } else {
-          alert("Congratulations! You have reached the end of the 4,000 responses. Check your progress bar for total completion.");
+          loadItem(state.currentIndex + 1);
         }
       } catch (err) {
         alert(`Cannot proceed: Save failed (${err.message}). Please check your connection and retry.`);
@@ -452,11 +707,25 @@
     el.resumeUnratedBtn.addEventListener("click", async () => {
       try {
         const res = await apiFetch("/api/responses/next_unrated");
-        loadItem(res.next_index);
+        if (res.is_all_completed || (res.completed_count && res.completed_count >= state.totalItems)) {
+          alert("All 4,000 responses are complete! No unanswered items remain.");
+          return;
+        }
+        if (res.next_index === state.currentIndex) {
+          alert(`You are already on the next unanswered response (#${res.next_index}).`);
+        } else {
+          loadItem(res.next_index);
+        }
       } catch (err) {
         alert(`Could not fetch next unrated item: ${err.message}`);
       }
     });
+
+    if (el.footerResumeBtn) {
+      el.footerResumeBtn.addEventListener("click", () => {
+        el.resumeUnratedBtn.click();
+      });
+    }
 
     // Keyboard navigation (Alt + Left / Alt + Right)
     window.addEventListener("keydown", (e) => {

@@ -1,0 +1,5 @@
+Model,Max_Tokens_50_Truncation_Rate_Percent,Max_Tokens_256_Truncation_Rate_Percent,Average_Generated_Tokens_at_50,Degenerate_Loop_Inducing_Truncation
+HingGPT,43.1,34.2,31.9,High
+Phi-3.5-mini,8.9,11.7,18.0,Moderate
+Qwen2.5-3B,10.6,2.4,23.7,Low
+Qwen2.5-7B,9.3,1.9,27.6,Low

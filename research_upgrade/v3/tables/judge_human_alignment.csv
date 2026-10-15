@@ -1,0 +1,19 @@
+judge_model,provider,evaluation_role,dimension,dimension_label,matched_sample_size,missing_records,human_mean,judge_mean,mean_bias_judge_minus_human,spearman_rho,spearman_p_value,kendall_tau,kendall_p_value,quadratic_weighted_kappa
+Mistral-7B-Instruct-v0.3,Mistral AI,Independent Open Weights,fluency,Fluency,500,0,2.626,2.516,-0.11,0.1579,3.9305e-04,0.1345,4.3786e-04,0.1706
+Mistral-7B-Instruct-v0.3,Mistral AI,Independent Open Weights,code_mixing_naturalness,Code-Mixing Naturalness,500,0,2.376,2.826,0.45,0.2215,5.6393e-07,0.1868,8.0089e-07,0.1761
+Mistral-7B-Instruct-v0.3,Mistral AI,Independent Open Weights,hindi_grammar,Hindi Grammar,500,0,2.606,2.072,-0.534,0.127,4.4374e-03,0.1064,5.1754e-03,0.1223
+Mistral-7B-Instruct-v0.3,Mistral AI,Independent Open Weights,prompt_adherence,Prompt Adherence,500,0,2.316,2.476,0.16,0.1914,1.6338e-05,0.1607,2.2871e-05,0.153
+Mistral-7B-Instruct-v0.3,Mistral AI,Independent Open Weights,spelling_consistency,Spelling Consistency,500,0,2.5,3.342,0.842,0.1754,8.0480e-05,0.1495,9.1426e-05,0.1388
+Mistral-7B-Instruct-v0.3,Mistral AI,Independent Open Weights,overall,Overall Quality,500,0,2.372,2.47,0.098,0.1837,3.5718e-05,0.1548,4.2575e-05,0.1691
+OLMo-2-1B,Allen AI,Independent Compact Open Weights,fluency,Fluency,499,1,2.6253,3.5511,0.9259,-0.0241,5.9186e-01,-0.0212,5.9514e-01,-0.0174
+OLMo-2-1B,Allen AI,Independent Compact Open Weights,code_mixing_naturalness,Code-Mixing Naturalness,499,1,2.3747,4.2505,1.8758,-0.0743,9.7462e-02,-0.0653,9.7410e-02,-0.021
+OLMo-2-1B,Allen AI,Independent Compact Open Weights,hindi_grammar,Hindi Grammar,499,1,2.6052,3.9018,1.2966,0.0917,4.0641e-02,0.0799,4.0704e-02,0.0512
+OLMo-2-1B,Allen AI,Independent Compact Open Weights,prompt_adherence,Prompt Adherence,499,1,2.3146,4.006,1.6914,-0.0662,1.3976e-01,-0.058,1.3343e-01,-0.023
+OLMo-2-1B,Allen AI,Independent Compact Open Weights,spelling_consistency,Spelling Consistency,499,1,2.501,4.3727,1.8717,0.0237,5.9697e-01,0.0212,5.9059e-01,0.0068
+OLMo-2-1B,Allen AI,Independent Compact Open Weights,overall,Overall Quality,499,1,2.3747,4.2565,1.8818,-0.0426,3.4231e-01,-0.0373,3.4139e-01,-0.0135
+Qwen2.5-3B-Instruct (Partial),Alibaba,Non-Independent Family (Sensitivity Analysis),fluency,Fluency,56,0,2.4107,1.2857,-1.125,-0.144,2.8980e-01,-0.1276,2.8884e-01,-0.0986
+Qwen2.5-3B-Instruct (Partial),Alibaba,Non-Independent Family (Sensitivity Analysis),code_mixing_naturalness,Code-Mixing Naturalness,56,0,2.1964,1.25,-0.9464,0.0484,7.2334e-01,0.0446,7.1611e-01,0.0036
+Qwen2.5-3B-Instruct (Partial),Alibaba,Non-Independent Family (Sensitivity Analysis),hindi_grammar,Hindi Grammar,56,0,2.4464,1.1607,-1.2857,0.064,6.3916e-01,0.0584,6.3140e-01,-0.0002
+Qwen2.5-3B-Instruct (Partial),Alibaba,Non-Independent Family (Sensitivity Analysis),prompt_adherence,Prompt Adherence,56,0,2.125,1.3036,-0.8214,-0.009,9.4764e-01,-0.0082,9.4730e-01,-0.0182
+Qwen2.5-3B-Instruct (Partial),Alibaba,Non-Independent Family (Sensitivity Analysis),spelling_consistency,Spelling Consistency,56,0,2.2679,1.2857,-0.9821,0.1191,3.8191e-01,0.1085,3.7142e-01,0.0326
+Qwen2.5-3B-Instruct (Partial),Alibaba,Non-Independent Family (Sensitivity Analysis),overall,Overall Quality,56,0,2.2321,1.2143,-1.0179,0.1137,4.0419e-01,0.1044,3.9297e-01,0.0182

@@ -1,0 +1,8 @@
+Category,Count,Description
+Source Preprocessed Utterances,14601,"Deduplicated, cleaned validation corpus (data/processed/cpt/validation.jsonl)"
+Continued Pretraining (CPT) Data,277431,"1-epoch domain adaptation corpus (17,340 steps x effective batch 16)"
+Hinglish-Bench Evaluation Prompts,1000,Deterministic seed-42 sample across conversational Hinglish genres
+Leakage-Free Benchmark Subset,992,Prompts with Jaccard 8-gram overlap J < 0.80 against 277k CPT corpus
+Quarantined Moderate-Overlap Prompts,8,Colloquial formulaic greetings (0.80 <= J < 0.90) quarantined from benchmark
+High / Exact Overlap Prompts,0,Zero exact (J=1.00) or high (0.90<=J<1.00) duplicate prompts found
+Controlled Generations Benchmark,4000,"1,000 prompts x 4 models with nucleus decoding (temp=0.7, top-p=0.9, max 50 tok)"
