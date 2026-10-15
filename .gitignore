@@ -22,3 +22,20 @@ __pycache__/
 # Local model/checkpoint directories
 models/
 outputs/llm_judge/phi_offload/
+
+# Databases and evaluation state
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+ratings_4000.db*
+
+# Ephemeral tunnel URLs and links
+TUNNEL_URL.txt
+ACTIVE_LINKS.json
+ACTIVE_LINKS.txt
+
+# Private exports containing annotator evaluations
+human_ratings_*export*.csv
+

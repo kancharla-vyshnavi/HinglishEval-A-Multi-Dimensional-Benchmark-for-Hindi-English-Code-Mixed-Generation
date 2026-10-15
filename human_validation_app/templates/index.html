@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HinglishEval: Double-Blind Human Evaluation Platform</title>
+  <meta name="description" content="Scientific double-blind evaluation platform for Hindi-English code-mixed language models.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Navigation / Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-badge">Double-Blind Study</div>
+      <h1 class="brand-title">HinglishEval Benchmark</h1>
+    </div>
+
+    <div class="header-actions">
+      <!-- Active Annotator Pill -->
+      <div id="annotator-pill" class="user-pill" style="display: none;">
+        <span class="status-dot"></span>
+        <span id="annotator-label">Annotator</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <button type="button" class="btn-subtle" id="rubric-btn" title="View Rating Guidelines">
+        📖 Scoring Guide
+      </button>
+
+      <button type="button" class="btn-subtle" id="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+        🌓
+      </button>
+
+      <button type="button" class="btn-subtle" id="logout-btn" style="display: none;" title="Sign Out">
+        Sign Out
+      </button>
+    </div>
+  </header>
+
+  <!-- Login Modal Overlay (Displayed if unauthenticated) -->
+  <div id="login-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-badge">Secure Authentication</div>
+      <h2 style="margin: 0.5rem 0 0.25rem 0; font-size: 1.4rem;">Sign In to Evaluate</h2>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">
+        Enter your designated access code. Each evaluator works independently with private, autosaved progress.
+      </p>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="access-code-input" class="form-label">Private Access Code</label>
+          <input
+            type="password"
+            id="access-code-input"
+            class="form-input"
+            placeholder="Enter your personal access code"
+            required
+            autocomplete="current-password"
+          >
+        </div>
+
+        <div id="login-error" class="alert-error" style="display: none;"></div>
+
+        <button type="submit" class="btn-primary" id="login-submit-btn" style="width: 100%; margin-top: 1rem;">
+          Sign In & Start Rating
+        </button>
+      </form>
+      <div style="font-size: 0.78rem; color: var(--text-subtle); margin-top: 1.25rem; text-align: center;">
+        Model identities and partner ratings are strictly blinded.
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Rating Interface -->
+  <main id="app-container" class="main-layout" style="display: none;">
+
+    <!-- Progress & Jump Navigation Bar -->
+    <section class="progress-bar-card">
+      <div class="progress-info-row">
+        <div class="progress-label-group">
+          <span class="progress-title">Your Evaluation Progress</span>
+          <span class="progress-counter" id="progress-text">0 / 4,000 completed</span>
+        </div>
+        <div class="progress-percent-badge" id="progress-percent">0.0%</div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="4000" aria-valuenow="0">
+        <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+      </div>
+
+      <div class="nav-controls-row">
+        <div class="jump-control">
+          <label for="jump-index-input">Jump to Item:</label>
+          <input type="number" id="jump-index-input" class="jump-input" min="1" max="4000" value="1">
+          <button type="button" class="btn-small" id="jump-go-btn">Go</button>
+        </div>
+
+        <button type="button" class="btn-resume" id="resume-unrated-btn">
+          ⚡ Jump to Next Unanswered
+        </button>
+      </div>
+    </section>
+
+    <!-- Evaluation Grid: Stimulus & Scoring -->
+    <div class="eval-grid">
+      
+      <!-- Stimulus Column -->
+      <section class="stimulus-panel">
+        <div class="panel-header">
+          <div class="stimulus-id-badge" id="item-badge">Response #1 (RESP_0001)</div>
+          <div class="completion-badge incomplete" id="completion-badge">Incomplete</div>
+        </div>
+
+        <!-- Optional Source Utterance -->
+        <div class="content-box source-box" id="source-box" style="display: none;">
+          <div class="box-tag">Original Hinglish Utterance</div>
+          <div class="box-body" id="source-text-content"></div>
+        </div>
+
+        <!-- Benchmark Prompt -->
+        <div class="content-box prompt-box">
+          <div class="box-tag">Benchmark Prompt</div>
+          <div class="box-body" id="prompt-content">Loading prompt...</div>
+        </div>
+
+        <!-- Generated Response (Double-Blind) -->
+        <div class="content-box response-box">
+          <div class="box-tag response-tag">
+            Generated Response <span class="blind-tag">(Model Blinded)</span>
+          </div>
+          <div class="box-body response-text" id="response-content">Loading generated response...</div>
+        </div>
+      </section>
+
+      <!-- Scoring Column -->
+      <section class="scoring-panel">
+        <div class="scoring-header">
+          <div>
+            <h2 class="scoring-title">Evaluation Dimensions</h2>
+            <div class="scoring-subtitle">Rate all 6 dimensions on a 1–5 scale. Autosaved on every click.</div>
+          </div>
+          <!-- Real-time Save Status Badge -->
+          <div class="save-status-badge saved" id="save-status-badge">
+            <span class="save-icon">✓</span>
+            <span class="save-label" id="save-status-text">All Saved</span>
+          </div>
+        </div>
+
+        <!-- 6 Scoring Groups -->
+        <form id="rating-form" class="scoring-form">
+
+          <!-- 1. Fluency -->
+          <fieldset class="dimension-group" data-dimension="fluency">
+            <legend class="dim-legend">
+              <span class="dim-name">1. Fluency</span>
+              <span class="dim-desc">Coherence, readability, natural bilingual flow</span>
+            </legend>
+            <div class="scale-row">
+              <label class="scale-btn"><input type="radio" name="fluency" value="1"><span>1</span><small>Broken</small></label>
+              <label class="scale-btn"><input type="radio" name="fluency" value="2"><span>2</span><small>Poor</small></label>
+              <label class="scale-btn"><input type="radio" name="fluency" value="3"><span>3</span><small>Acceptable</small></label>
+              <label class="scale-btn"><input type="radio" name="fluency" value="4"><span>4</span><small>Good</small></label>
+              <label class="scale-btn"><input type="radio" name="fluency" value="5"><span>5</span><small>Flawless</small></label>
+            </div>
+          </fieldset>
+
+          <!-- 2. Code-Mixing Naturalness -->
+          <fieldset class="dimension-group" data-dimension="code_mixing_naturalness">
+            <legend class="dim-legend">
+              <span class="dim-name">2. Code-Mixing Naturalness</span>
+              <span class="dim-desc">Authentic urban Hindi-English code-switching</span>
+            </legend>
+            <div class="scale-row">
+              <label class="scale-btn"><input type="radio" name="code_mixing_naturalness" value="1"><span>1</span><small>Unnatural</small></label>
+              <label class="scale-btn"><input type="radio" name="code_mixing_naturalness" value="2"><span>2</span><small>Rigid</small></label>
+              <label class="scale-btn"><input type="radio" name="code_mixing_naturalness" value="3"><span>3</span><small>Moderate</small></label>
+              <label class="scale-btn"><input type="radio" name="code_mixing_naturalness" value="4"><span>4</span><small>Natural</small></label>
+              <label class="scale-btn"><input type="radio" name="code_mixing_naturalness" value="5"><span>5</span><small>Authentic</small></label>
+            </div>
+          </fieldset>
+
+          <!-- 3. Hindi Grammar -->
+          <fieldset class="dimension-group" data-dimension="hindi_grammar">
+            <legend class="dim-legend">
+              <span class="dim-name">3. Hindi Grammar</span>
+              <span class="dim-desc">Gender/number agreement, postpositions, morphosyntax</span>
+            </legend>
+            <div class="scale-row">
+              <label class="scale-btn"><input type="radio" name="hindi_grammar" value="1"><span>1</span><small>Severe</small></label>
+              <label class="scale-btn"><input type="radio" name="hindi_grammar" value="2"><span>2</span><small>Frequent</small></label>
+              <label class="scale-btn"><input type="radio" name="hindi_grammar" value="3"><span>3</span><small>Noticeable</small></label>
+              <label class="scale-btn"><input type="radio" name="hindi_grammar" value="4"><span>4</span><small>Sound</small></label>
+              <label class="scale-btn"><input type="radio" name="hindi_grammar" value="5"><span>5</span><small>Impeccable</small></label>
+            </div>
+          </fieldset>
+
+          <!-- 4. Prompt Adherence -->
+          <fieldset class="dimension-group" data-dimension="prompt_adherence">
+            <legend class="dim-legend">
+              <span class="dim-name">4. Prompt Adherence</span>
+              <span class="dim-desc">Directness, relevance, completeness of task fulfillment</span>
+            </legend>
+            <div class="scale-row">
+              <label class="scale-btn"><input type="radio" name="prompt_adherence" value="1"><span>1</span><small>Irrelevant</small></label>
+              <label class="scale-btn"><input type="radio" name="prompt_adherence" value="2"><span>2</span><small>Weak</small></label>
+              <label class="scale-btn"><input type="radio" name="prompt_adherence" value="3"><span>3</span><small>Partial</small></label>
+              <label class="scale-btn"><input type="radio" name="prompt_adherence" value="4"><span>4</span><small>Strong</small></label>
+              <label class="scale-btn"><input type="radio" name="prompt_adherence" value="5"><span>5</span><small>Exemplary</small></label>
+            </div>
+          </fieldset>
+
+          <!-- 5. Spelling Consistency -->
+          <fieldset class="dimension-group" data-dimension="spelling_consistency">
+            <legend class="dim-legend">
+              <span class="dim-name">5. Spelling Consistency</span>
+              <span class="dim-desc">Romanized Hindi transliteration readability & consistency</span>
+            </legend>
+            <div class="scale-row">
+              <label class="scale-btn"><input type="radio" name="spelling_consistency" value="1"><span>1</span><small>Chaos</small></label>
+              <label class="scale-btn"><input type="radio" name="spelling_consistency" value="2"><span>2</span><small>Erratic</small></label>
+              <label class="scale-btn"><input type="radio" name="spelling_consistency" value="3"><span>3</span><small>Readable</small></label>
+              <label class="scale-btn"><input type="radio" name="spelling_consistency" value="4"><span>4</span><small>Standard</small></label>
+              <label class="scale-btn"><input type="radio" name="spelling_consistency" value="5"><span>5</span><small>Exemplary</small></label>
+            </div>
+          </fieldset>
+
+          <!-- 6. Overall Quality -->
+          <fieldset class="dimension-group" data-dimension="overall">
+            <legend class="dim-legend">
+              <span class="dim-name">6. Overall Quality</span>
+              <span class="dim-desc">Holistic synthesis for benchmark-grade bilingual LLM generation</span>
+            </legend>
+            <div class="scale-row">
+              <label class="scale-btn"><input type="radio" name="overall" value="1"><span>1</span><small>Unusable</small></label>
+              <label class="scale-btn"><input type="radio" name="overall" value="2"><span>2</span><small>Poor</small></label>
+              <label class="scale-btn"><input type="radio" name="overall" value="3"><span>3</span><small>Adequate</small></label>
+              <label class="scale-btn"><input type="radio" name="overall" value="4"><span>4</span><small>High</small></label>
+              <label class="scale-btn"><input type="radio" name="overall" value="5"><span>5</span><small>Outstanding</small></label>
+            </div>
+          </fieldset>
+
+          <!-- Optional Notes -->
+          <div class="notes-group">
+            <label for="notes-input" class="notes-label">Annotator Notes (Optional)</label>
+            <textarea
+              id="notes-input"
+              class="notes-textarea"
+              rows="2"
+              placeholder="Add optional notes (e.g., repetition loop, code-mixing anomaly, transliteration note)..."
+            ></textarea>
+          </div>
+
+        </form>
+
+        <!-- Bottom Navigation Footer -->
+        <footer class="nav-footer">
+          <button type="button" class="btn-nav" id="prev-item-btn">
+            ← Previous
+          </button>
+          
+          <div class="nav-status-msg" id="nav-status-msg">
+            Press <strong>Save & Next</strong> to proceed
+          </div>
+
+          <button type="button" class="btn-primary" id="save-next-btn">
+            Save & Next →
+          </button>
+        </footer>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Scoring Guide / Rubric Modal -->
+  <div id="rubric-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card rubric-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="margin: 0; font-size: 1.3rem;">Evaluation Rubric & Likert Scales (1–5)</h2>
+        <button type="button" class="btn-subtle" id="close-rubric-btn" style="font-size: 1.25rem; padding: 0.25rem 0.6rem;">&times;</button>
+      </div>
+
+      <div class="rubric-body">
+        <section class="rubric-section">
+          <h3>1. Fluency</h3>
+          <ul>
+            <li><strong>1 (Broken):</strong> Incoherent, disjointed fragments, repetitive loops, or syntax breakdowns.</li>
+            <li><strong>2 (Poor):</strong> Awkward phrasing, heavy stumbling, or partial sentence fragments.</li>
+            <li><strong>3 (Acceptable):</strong> Understandable with noticeable phrasing awkwardness.</li>
+            <li><strong>4 (Good):</strong> Natural, flowing bilingual sentences with minor stylistic blemishes.</li>
+            <li><strong>5 (Flawless):</strong> Highly articulate, smooth, native-sounding conversational flow.</li>
+          </ul>
+        </section>
+
+        <section class="rubric-section">
+          <h3>2. Code-Mixing Naturalness</h3>
+          <ul>
+            <li><strong>1 (Unnatural):</strong> Unnatural monolingual rewrite, or jarring word-by-word dictionary substitution.</li>
+            <li><strong>2 (Rigid):</strong> Forced code-mixing that does not follow Hindi matrix syntax.</li>
+            <li><strong>3 (Moderate):</strong> Understandable code-switching with some artificial phrasing.</li>
+            <li><strong>4 (Natural):</strong> Smooth intra-sentential switching matching authentic urban Hindi-English.</li>
+            <li><strong>5 (Authentic):</strong> Masterful bilingual code-switching; completely native vernacular feel.</li>
+          </ul>
+        </section>
+
+        <section class="rubric-section">
+          <h3>3. Hindi Grammar</h3>
+          <ul>
+            <li><strong>1 (Severe):</strong> Corrupted postpositions, gender/number disagreement, incorrect auxiliary verbs.</li>
+            <li><strong>2 (Frequent):</strong> Notable grammatical clashes disrupting meaning.</li>
+            <li><strong>3 (Noticeable):</strong> Understandable but with minor agreement slips (e.g. karta vs karti).</li>
+            <li><strong>4 (Sound):</strong> Grammatically correct with standard postpositional structures.</li>
+            <li><strong>5 (Impeccable):</strong> Flawless Hindi morphosyntax and verb-complement alignment.</li>
+          </ul>
+        </section>
+
+        <section class="rubric-section">
+          <h3>4. Prompt Adherence</h3>
+          <ul>
+            <li><strong>1 (Irrelevant):</strong> Empty generation, refusal, traceback, or totally unrelated topic.</li>
+            <li><strong>2 (Weak):</strong> Barely touches user query; largely veers off into generic statements.</li>
+            <li><strong>3 (Partial):</strong> Answers the prompt partially but misses core instructions.</li>
+            <li><strong>4 (Strong):</strong> Directly and coherently addresses the user's prompt.</li>
+            <li><strong>5 (Exemplary):</strong> Thoroughly, accurately, and contextually fulfills the prompt.</li>
+          </ul>
+        </section>
+
+        <section class="rubric-section">
+          <h3>5. Spelling Consistency</h3>
+          <ul>
+            <li><strong>1 (Chaos):</strong> Chaotic transliteration, extreme vowel dropping, unreadable Romanized Hindi.</li>
+            <li><strong>2 (Erratic):</strong> Inconsistent spelling of common words within the same utterance.</li>
+            <li><strong>3 (Readable):</strong> Mostly readable with non-standard phonetic choices.</li>
+            <li><strong>4 (Standard):</strong> Consistent, readable Romanized Hindi transliteration.</li>
+            <li><strong>5 (Exemplary):</strong> Standard, clean, and unambiguous Romanized Hindi orthography.</li>
+          </ul>
+        </section>
+
+        <section class="rubric-section">
+          <h3>6. Overall Quality</h3>
+          <ul>
+            <li><strong>1 (Unusable):</strong> Fails to provide meaningful communication.</li>
+            <li><strong>2 (Poor):</strong> Significant flaws across multiple dimensions.</li>
+            <li><strong>3 (Adequate):</strong> Acceptable everyday conversational response.</li>
+            <li><strong>4 (High):</strong> Strong, pleasant, and fluent code-mixed response.</li>
+            <li><strong>5 (Outstanding):</strong> Benchmark-setting, publication-quality Hinglish generation.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div style="text-align: right; margin-top: 1rem;">
+        <button type="button" class="btn-primary" id="dismiss-rubric-btn">Understood, Back to Rating</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

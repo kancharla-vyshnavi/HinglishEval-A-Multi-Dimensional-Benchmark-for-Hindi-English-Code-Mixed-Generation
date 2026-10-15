@@ -1,0 +1,34 @@
+services:
+  # Web Application Service
+  - type: web
+    name: hinglisheval-app
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r human_validation_app/requirements.txt && python -m human_validation_app.migrate_ratings"
+    startCommand: "uvicorn human_validation_app.app:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hinglisheval-postgres
+          property: connectionString
+      - key: ANNOTATOR_A_KEY
+        value: eval_a_lead_2026
+      - key: ANNOTATOR_B_KEY
+        value: eval_b_partner_2026
+      - key: ADMIN_SECRET
+        value: admin_hinglish_master_2026
+      - key: SECRET_KEY
+        value: hinglisheval_production_secret_key_salt_2026
+
+databases:
+  # Persistent PostgreSQL Database
+  - name: hinglisheval-postgres
+    plan: free
+    region: oregon
+    databaseName: hinglisheval
+    user: hinglish_user

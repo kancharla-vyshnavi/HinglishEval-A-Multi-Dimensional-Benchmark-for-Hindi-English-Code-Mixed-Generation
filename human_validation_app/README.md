@@ -1,0 +1,140 @@
+# HinglishEval Human Validation Platform
+
+A double-blind, mobile-friendly human evaluation web platform for Hindi-English code-mixed LLM responses.
+
+Built for **two independent human annotators** (Annotator A and Annotator B) to independently rate the **same 4,000 generated benchmark responses** across 4 models (`HingGPT`, `Phi-3.5-mini`, `Qwen2.5-3B`, `Qwen2.5-7B`), giving **8,000 response-level ratings** total.
+
+---
+
+## 1. Key Features & Safeguards
+
+- **Double-Blind Stimulus:** Model identities are strictly hidden from all annotators. Response IDs (`RESP_0001` to `RESP_4000`) contain zero model cues.
+- **Isolated Progress:** Each annotator logs in with a private access code. Annotators only see and edit their own ratings; neither can view or alter partner ratings.
+- **Identical Stable Ordering:** Both annotators evaluate responses in the exact same deterministic sequence (Item #1 to #4,000).
+- **Persistent Autosave:** Every rating change is validated server-side and persisted immediately to the database. The UI displays "Saved" only after the server confirms receipt.
+- **Resume at Any Time:** Evaluators can turn off screens, close browsers, disconnect, and resume directly at their next incomplete response.
+- **6 Likert Dimensions (1–5 scale):**
+  1. *Fluency*
+  2. *Code-Mixing Naturalness*
+  3. *Hindi Grammar*
+  4. *Prompt Adherence*
+  5. *Spelling Consistency*
+  6. *Overall Quality*
+- **Database Engine:** Portable SQLAlchemy supporting local SQLite (`ratings_4000.db`) with WAL mode and production PostgreSQL on Render.
+- **Protected Export:** Admin endpoint downloads complete CSV with model names unmasked and verified metadata.
+- **Inter-Annotator Agreement:** Automated computation of Ordinal Krippendorff's alpha and Quadratic Weighted Kappa (QWK) on genuine completed pairs.
+
+---
+
+## 2. Directory Structure
+
+```text
+human_validation_app/
+├── app.py                # FastAPI web server and REST API endpoints
+├── auth.py               # PBKDF2 hashing and signed session token management
+├── config.py             # App configuration and environment variable loading
+├── database.py           # SQLAlchemy database connection and session provider
+├── models.py             # ORM models (Response, Annotator, Annotation, Audit)
+├── import_4000.py        # Idempotent 4,000 responses importer
+├── export_dataset.py     # CLI export and validation reporting utility
+├── analyze_agreement.py  # Statistical inter-annotator agreement analyzer
+├── test_app.py           # Complete unit and integration test suite
+├── render.yaml           # Render deployment blueprint (Web + PostgreSQL)
+├── Dockerfile            # Container image specification
+├── Procfile              # Process definition for Render / Heroku
+├── requirements.txt      # Production Python dependencies
+├── static/
+│   ├── app.js            # Client UI logic, autosave, and state management
+│   └── style.css         # Modern responsive dark/light styling
+└── templates/
+    └── index.html        # Single-page evaluation application
+```
+
+---
+
+## 3. Environment Variables
+
+| Variable | Description | Default (Local) |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | PostgreSQL connection string (or SQLite path) | `sqlite:///./ratings_4000.db` |
+| `ANNOTATOR_A_KEY` | Access code for Annotator A (Lead) | `eval_a_lead_2026` |
+| `ANNOTATOR_B_KEY` | Access code for Annotator B (Partner) | `eval_b_partner_2026` |
+| `ADMIN_SECRET` | Secret token for admin export & metrics | `admin_hinglish_master_2026` |
+| `SECRET_KEY` | Secret salt for cryptographic session cookies | `hinglisheval_production_secret_key_salt_2026` |
+| `PORT` | Web server listening port | `8000` |
+
+---
+
+## 4. Local Execution & Testing
+
+### A. Run Database Import (Idempotent)
+```powershell
+.\.venv311\Scripts\python.exe -m human_validation_app.import_4000
+```
+
+### B. Run Automated Test Suite
+```powershell
+.\.venv311\Scripts\python.exe -m unittest human_validation_app.test_app -v
+```
+
+### C. Launch Local Development Server
+```powershell
+.\.venv311\Scripts\python.exe -m uvicorn human_validation_app.app:app --host 127.0.0.1 --port 8000 --reload
+```
+Open in browser: `http://127.0.0.1:8000`
+
+---
+
+## 5. Production Deployment on Render
+
+### Step 1: Push Repository to GitHub
+Ensure `human_validation_app/` and the canonical data files (`outputs/controlled_1000/benchmark_generations_.csv` and `data/benchmarks/hinglish_bench_.csv`) are pushed to your GitHub repository.
+
+### Step 2: Create Blueprint on Render
+1. Sign in to your [Render Dashboard](https://dashboard.render.com).
+2. Click **New +** and select **Blueprint**.
+3. Connect your GitHub repository.
+4. Render automatically parses `human_validation_app/render.yaml` and provisions:
+   - **PostgreSQL Database:** Managed PostgreSQL database with automatic backups.
+   - **Web Service:** Python 3.11 web service with automatic SSL/HTTPS, running uvicorn.
+5. Click **Apply**.
+
+### Step 3: Verify Deployment
+1. Navigate to the live URL generated by Render (e.g. `https://hinglisheval-app.onrender.com`).
+2. Test the `/health` endpoint: `https://hinglisheval-app.onrender.com/health`
+3. Retrieve the generated access keys from your Render Service **Environment** tab:
+   - `ANNOTATOR_A_KEY`
+   - `ANNOTATOR_B_KEY`
+   - `ADMIN_SECRET`
+
+---
+
+## 6. Admin Export & Backup Instructions
+
+### Download Complete Evaluation CSV
+Via browser or curl (using your admin secret):
+```bash
+curl -f "https://<your-live-url>/api/admin/export?admin_key=<ADMIN_SECRET>" -o human_ratings_export.csv
+```
+
+Or via CLI locally:
+```powershell
+.\.venv311\Scripts\python.exe -m human_validation_app.export_dataset --output human_ratings_4000.csv --report
+```
+
+### Export CSV Schema
+`response_id, prompt_id, model, annotator_id, prompt, response, fluency, code_mixing_naturalness, hindi_grammar, prompt_adherence, spelling_consistency, overall, notes, submitted_at, updated_at`
+
+---
+
+## 7. Inter-Annotator Agreement Analysis
+
+To analyze genuine agreement between Annotator A and Annotator B once evaluations are submitted:
+```powershell
+.\.venv311\Scripts\python.exe -m human_validation_app.analyze_agreement --out agreement_report.md
+```
+This generates:
+- Exact agreement (%) and $\pm 1$ agreement (%)
+- Quadratic Weighted Kappa (QWK) with 95% bootstrap confidence intervals
+- Klaus Krippendorff's Ordinal $\alpha$ with 95% bootstrap confidence intervals
+- Diagnostic summary of missing and pending items
