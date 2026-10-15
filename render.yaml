@@ -5,7 +5,8 @@ services:
     env: python
     region: oregon
     plan: free
-    buildCommand: "pip install -r human_validation_app/requirements.txt && python -m human_validation_app.migrate_ratings"
+    buildCommand: "pip install -r human_validation_app/requirements.txt"
+    preDeployCommand: "python -m human_validation_app.migrate_ratings"
     startCommand: "uvicorn human_validation_app.app:app --host 0.0.0.0 --port $PORT"
     healthCheckPath: /health
     autoDeploy: true

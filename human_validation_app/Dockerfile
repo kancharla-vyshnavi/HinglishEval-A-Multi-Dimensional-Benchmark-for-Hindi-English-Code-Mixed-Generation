@@ -23,8 +23,8 @@ COPY outputs/controlled_1000 outputs/controlled_1000
 COPY data/benchmarks data/benchmarks
 COPY human_validation_app human_validation_app
 
-# Run idempotent import to prepare database schema
-RUN python -m human_validation_app.import_4000
+# Run idempotent migration to prepare database schema and seed ratings
+RUN python -m human_validation_app.migrate_ratings
 
 # Expose port and configure health check
 EXPOSE 8000

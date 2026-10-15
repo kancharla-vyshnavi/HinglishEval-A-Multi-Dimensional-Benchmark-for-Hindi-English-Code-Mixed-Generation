@@ -63,6 +63,15 @@ app = FastAPI(
     version="3.0.0"
 )
 
+@app.on_event("startup")
+def on_startup():
+    """Ensure database schema is created and initial seed ratings are loaded."""
+    try:
+        from human_validation_app.migrate_ratings import migrate_to_target_db
+        migrate_to_target_db()
+    except Exception as exc:
+        print(f"Warning during startup migration: {exc}")
+
 # Static files mounting
 STATIC_DIR = APP_DIR / "static"
 STATIC_DIR.mkdir(exist_ok=True)
