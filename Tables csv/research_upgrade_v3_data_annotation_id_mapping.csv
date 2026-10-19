@@ -1,0 +1,201 @@
+﻿sheet_type,blind_id,assignment_id,response_id,model,category,row_index,prompt_id,original_annotator_overall
+second_rater,BLIND_ITEM_001,A_0360,RESP_Qwen2.5-7B_0980,Qwen2.5-7B,Casual Conversation,980,981,5
+second_rater,BLIND_ITEM_002,A_0296,RESP_Qwen2.5-3B_0797,Qwen2.5-3B,Casual Conversation,797,798,3
+second_rater,BLIND_ITEM_003,A_0183,RESP_Qwen2.5-3B_0026,Qwen2.5-3B,News & Explainers,26,27,3
+second_rater,BLIND_ITEM_004,A_0212,RESP_Phi-3.5-mini_0009,Phi-3.5-mini,Casual Conversation,9,10,4
+second_rater,BLIND_ITEM_005,A_0465,RESP_Phi-3.5-mini_0906,Phi-3.5-mini,Casual Conversation,906,907,2
+second_rater,BLIND_ITEM_006,A_0064,RESP_Phi-3.5-mini_0060,Phi-3.5-mini,Casual Conversation,60,61,1
+second_rater,BLIND_ITEM_007,A_0011,RESP_HingGPT_0112,HingGPT,Captions & One-liners,112,113,1
+second_rater,BLIND_ITEM_008,A_0354,RESP_Qwen2.5-7B_0613,Qwen2.5-7B,Casual Conversation,613,614,1
+second_rater,BLIND_ITEM_009,A_0122,RESP_HingGPT_0015,HingGPT,Casual Conversation,15,16,3
+second_rater,BLIND_ITEM_010,A_0102,RESP_HingGPT_0260,HingGPT,Social Media Posts,260,261,1
+second_rater,BLIND_ITEM_011,A_0071,RESP_HingGPT_0524,HingGPT,Casual Conversation,524,525,1
+second_rater,BLIND_ITEM_012,A_0375,RESP_Phi-3.5-mini_0526,Phi-3.5-mini,News & Explainers,526,527,2
+second_rater,BLIND_ITEM_013,A_0093,RESP_Qwen2.5-3B_0137,Qwen2.5-3B,Social Media Posts,137,138,2
+second_rater,BLIND_ITEM_014,A_0388,RESP_Phi-3.5-mini_0038,Phi-3.5-mini,News & Explainers,38,39,1
+second_rater,BLIND_ITEM_015,A_0299,RESP_Qwen2.5-7B_0013,Qwen2.5-7B,Casual Conversation,13,14,3
+second_rater,BLIND_ITEM_016,A_0232,RESP_HingGPT_0945,HingGPT,Social Media Posts,945,946,1
+second_rater,BLIND_ITEM_017,A_0157,RESP_Qwen2.5-7B_0127,Qwen2.5-7B,Casual Conversation,127,128,2
+second_rater,BLIND_ITEM_018,A_0144,RESP_Qwen2.5-7B_0876,Qwen2.5-7B,Casual Conversation,876,877,2
+second_rater,BLIND_ITEM_019,A_0182,RESP_HingGPT_0383,HingGPT,Casual Conversation,383,384,4
+second_rater,BLIND_ITEM_020,A_0249,RESP_Phi-3.5-mini_0983,Phi-3.5-mini,Casual Conversation,983,984,3
+second_rater,BLIND_ITEM_021,A_0365,RESP_Qwen2.5-3B_0721,Qwen2.5-3B,Casual Conversation,721,722,2
+second_rater,BLIND_ITEM_022,A_0371,RESP_Qwen2.5-7B_0515,Qwen2.5-7B,Casual Conversation,515,516,2
+second_rater,BLIND_ITEM_023,A_0191,RESP_Phi-3.5-mini_0061,Phi-3.5-mini,Casual Conversation,61,62,2
+second_rater,BLIND_ITEM_024,A_0424,RESP_Phi-3.5-mini_0858,Phi-3.5-mini,Casual Conversation,858,859,3
+second_rater,BLIND_ITEM_025,A_0449,RESP_Qwen2.5-3B_0578,Qwen2.5-3B,Casual Conversation,578,579,3
+second_rater,BLIND_ITEM_026,A_0316,RESP_HingGPT_0047,HingGPT,Casual Conversation,47,48,4
+second_rater,BLIND_ITEM_027,A_0324,RESP_Phi-3.5-mini_0599,Phi-3.5-mini,Casual Conversation,599,600,2
+second_rater,BLIND_ITEM_028,A_0306,RESP_Qwen2.5-7B_0382,Qwen2.5-7B,Casual Conversation,382,383,3
+second_rater,BLIND_ITEM_029,A_0027,RESP_HingGPT_0157,HingGPT,Casual Conversation,157,158,2
+second_rater,BLIND_ITEM_030,A_0002,RESP_Qwen2.5-3B_0449,Qwen2.5-3B,Casual Conversation,449,450,1
+second_rater,BLIND_ITEM_031,A_0473,RESP_HingGPT_0171,HingGPT,Casual Conversation,171,172,3
+second_rater,BLIND_ITEM_032,A_0004,RESP_Phi-3.5-mini_0830,Phi-3.5-mini,Casual Conversation,830,831,1
+second_rater,BLIND_ITEM_033,A_0105,RESP_Qwen2.5-7B_0525,Qwen2.5-7B,Casual Conversation,525,526,2
+second_rater,BLIND_ITEM_034,A_0319,RESP_Phi-3.5-mini_0912,Phi-3.5-mini,Casual Conversation,912,913,2
+second_rater,BLIND_ITEM_035,A_0033,RESP_Qwen2.5-7B_0976,Qwen2.5-7B,Captions & One-liners,976,977,1
+second_rater,BLIND_ITEM_036,A_0372,RESP_HingGPT_0307,HingGPT,Casual Conversation,307,308,2
+second_rater,BLIND_ITEM_037,A_0037,RESP_Qwen2.5-3B_0568,Qwen2.5-3B,Casual Conversation,568,569,3
+second_rater,BLIND_ITEM_038,A_0297,RESP_Qwen2.5-3B_0959,Qwen2.5-3B,Casual Conversation,959,960,3
+second_rater,BLIND_ITEM_039,A_0115,RESP_Phi-3.5-mini_0649,Phi-3.5-mini,Casual Conversation,649,650,1
+second_rater,BLIND_ITEM_040,A_0069,RESP_HingGPT_0427,HingGPT,Casual Conversation,427,428,1
+second_rater,BLIND_ITEM_041,A_0131,RESP_Phi-3.5-mini_0948,Phi-3.5-mini,Casual Conversation,948,949,2
+second_rater,BLIND_ITEM_042,A_0012,RESP_Phi-3.5-mini_0388,Phi-3.5-mini,Social Media Posts,388,389,1
+second_rater,BLIND_ITEM_043,A_0491,RESP_HingGPT_0413,HingGPT,Casual Conversation,413,414,2
+second_rater,BLIND_ITEM_044,A_0175,RESP_Qwen2.5-7B_0800,Qwen2.5-7B,Casual Conversation,800,801,3
+second_rater,BLIND_ITEM_045,A_0151,RESP_Phi-3.5-mini_0916,Phi-3.5-mini,Casual Conversation,916,917,2
+second_rater,BLIND_ITEM_046,A_0459,RESP_HingGPT_0770,HingGPT,News & Explainers,770,771,2
+second_rater,BLIND_ITEM_047,A_0216,RESP_Qwen2.5-7B_0793,Qwen2.5-7B,Casual Conversation,793,794,2
+second_rater,BLIND_ITEM_048,A_0063,RESP_Phi-3.5-mini_0659,Phi-3.5-mini,News & Explainers,659,660,2
+second_rater,BLIND_ITEM_049,A_0172,RESP_Qwen2.5-3B_0850,Qwen2.5-3B,Captions & One-liners,850,851,3
+second_rater,BLIND_ITEM_050,A_0387,RESP_HingGPT_0729,HingGPT,Casual Conversation,729,730,2
+second_rater,BLIND_ITEM_051,A_0140,RESP_HingGPT_0656,HingGPT,Casual Conversation,656,657,3
+second_rater,BLIND_ITEM_052,A_0315,RESP_HingGPT_0522,HingGPT,Social Media Posts,522,523,2
+second_rater,BLIND_ITEM_053,A_0414,RESP_HingGPT_0200,HingGPT,Casual Conversation,200,201,2
+second_rater,BLIND_ITEM_054,A_0405,RESP_Phi-3.5-mini_0497,Phi-3.5-mini,Social Media Posts,497,498,3
+second_rater,BLIND_ITEM_055,A_0377,RESP_HingGPT_0796,HingGPT,News & Explainers,796,797,2
+second_rater,BLIND_ITEM_056,A_0291,RESP_Qwen2.5-7B_0995,Qwen2.5-7B,News & Explainers,995,996,2
+second_rater,BLIND_ITEM_057,A_0246,RESP_HingGPT_0202,HingGPT,Casual Conversation,202,203,3
+second_rater,BLIND_ITEM_058,A_0079,RESP_Qwen2.5-3B_0264,Qwen2.5-3B,Captions & One-liners,264,265,2
+second_rater,BLIND_ITEM_059,A_0469,RESP_Phi-3.5-mini_0879,Phi-3.5-mini,Casual Conversation,879,880,2
+second_rater,BLIND_ITEM_060,A_0068,RESP_Qwen2.5-7B_0484,Qwen2.5-7B,Casual Conversation,484,485,4
+second_rater,BLIND_ITEM_061,A_0204,RESP_Qwen2.5-3B_0503,Qwen2.5-3B,Casual Conversation,503,504,2
+second_rater,BLIND_ITEM_062,A_0125,RESP_Qwen2.5-7B_0203,Qwen2.5-7B,Casual Conversation,203,204,1
+second_rater,BLIND_ITEM_063,A_0198,RESP_Qwen2.5-3B_0117,Qwen2.5-3B,Social Media Posts,117,118,3
+second_rater,BLIND_ITEM_064,A_0047,RESP_Phi-3.5-mini_0467,Phi-3.5-mini,Casual Conversation,467,468,1
+second_rater,BLIND_ITEM_065,A_0076,RESP_Qwen2.5-3B_0858,Qwen2.5-3B,Casual Conversation,858,859,1
+second_rater,BLIND_ITEM_066,A_0398,RESP_Qwen2.5-3B_0922,Qwen2.5-3B,Casual Conversation,922,923,3
+second_rater,BLIND_ITEM_067,A_0325,RESP_Phi-3.5-mini_0994,Phi-3.5-mini,Casual Conversation,994,995,2
+second_rater,BLIND_ITEM_068,A_0038,RESP_Qwen2.5-3B_0851,Qwen2.5-3B,Captions & One-liners,851,852,1
+second_rater,BLIND_ITEM_069,A_0452,RESP_Qwen2.5-3B_0131,Qwen2.5-3B,Casual Conversation,131,132,2
+second_rater,BLIND_ITEM_070,A_0001,RESP_Qwen2.5-7B_0702,Qwen2.5-7B,Casual Conversation,702,703,5
+second_rater,BLIND_ITEM_071,A_0203,RESP_Qwen2.5-7B_0633,Qwen2.5-7B,Casual Conversation,633,634,3
+second_rater,BLIND_ITEM_072,A_0044,RESP_Phi-3.5-mini_0332,Phi-3.5-mini,Casual Conversation,332,333,2
+second_rater,BLIND_ITEM_073,A_0379,RESP_Qwen2.5-3B_0886,Qwen2.5-3B,News & Explainers,886,887,2
+second_rater,BLIND_ITEM_074,A_0112,RESP_Phi-3.5-mini_0333,Phi-3.5-mini,Captions & One-liners,333,334,1
+second_rater,BLIND_ITEM_075,A_0099,RESP_Qwen2.5-7B_0674,Qwen2.5-7B,Casual Conversation,674,675,4
+second_rater,BLIND_ITEM_076,A_0495,RESP_Qwen2.5-3B_0373,Qwen2.5-3B,Casual Conversation,373,374,2
+second_rater,BLIND_ITEM_077,A_0067,RESP_Qwen2.5-7B_0945,Qwen2.5-7B,Social Media Posts,945,946,1
+second_rater,BLIND_ITEM_078,A_0492,RESP_Phi-3.5-mini_0123,Phi-3.5-mini,Social Media Posts,123,124,4
+second_rater,BLIND_ITEM_079,A_0456,RESP_Qwen2.5-7B_0497,Qwen2.5-7B,Social Media Posts,497,498,2
+second_rater,BLIND_ITEM_080,A_0022,RESP_Qwen2.5-3B_0764,Qwen2.5-3B,Casual Conversation,764,765,3
+second_rater,BLIND_ITEM_081,A_0385,RESP_Qwen2.5-3B_0533,Qwen2.5-3B,Social Media Posts,533,534,3
+second_rater,BLIND_ITEM_082,A_0010,RESP_Qwen2.5-7B_0245,Qwen2.5-7B,Captions & One-liners,245,246,1
+second_rater,BLIND_ITEM_083,A_0205,RESP_Phi-3.5-mini_0769,Phi-3.5-mini,Casual Conversation,769,770,3
+second_rater,BLIND_ITEM_084,A_0236,RESP_Phi-3.5-mini_0540,Phi-3.5-mini,Casual Conversation,540,541,3
+second_rater,BLIND_ITEM_085,A_0178,RESP_HingGPT_0054,HingGPT,Captions & One-liners,54,55,2
+second_rater,BLIND_ITEM_086,A_0135,RESP_Qwen2.5-3B_0384,Qwen2.5-3B,Casual Conversation,384,385,5
+second_rater,BLIND_ITEM_087,A_0322,RESP_HingGPT_0276,HingGPT,Casual Conversation,276,277,3
+second_rater,BLIND_ITEM_088,A_0152,RESP_HingGPT_0704,HingGPT,Casual Conversation,704,705,3
+second_rater,BLIND_ITEM_089,A_0121,RESP_HingGPT_0778,HingGPT,Casual Conversation,778,779,1
+second_rater,BLIND_ITEM_090,A_0167,RESP_Qwen2.5-7B_0409,Qwen2.5-7B,Casual Conversation,409,410,2
+second_rater,BLIND_ITEM_091,A_0031,RESP_Qwen2.5-7B_0400,Qwen2.5-7B,Casual Conversation,400,401,4
+second_rater,BLIND_ITEM_092,A_0111,RESP_Qwen2.5-3B_0700,Qwen2.5-3B,Casual Conversation,700,701,3
+second_rater,BLIND_ITEM_093,A_0466,RESP_Qwen2.5-7B_0235,Qwen2.5-7B,Casual Conversation,235,236,2
+second_rater,BLIND_ITEM_094,A_0497,RESP_Qwen2.5-7B_0627,Qwen2.5-7B,Casual Conversation,627,628,2
+second_rater,BLIND_ITEM_095,A_0201,RESP_HingGPT_0052,HingGPT,Casual Conversation,52,53,2
+second_rater,BLIND_ITEM_096,A_0096,RESP_Qwen2.5-3B_0149,Qwen2.5-3B,Captions & One-liners,149,150,2
+second_rater,BLIND_ITEM_097,A_0300,RESP_Qwen2.5-3B_0099,Qwen2.5-3B,Social Media Posts,99,100,5
+second_rater,BLIND_ITEM_098,A_0103,RESP_HingGPT_0348,HingGPT,Casual Conversation,348,349,1
+second_rater,BLIND_ITEM_099,A_0396,RESP_Qwen2.5-7B_0860,Qwen2.5-7B,Social Media Posts,860,861,2
+second_rater,BLIND_ITEM_100,A_0165,RESP_Qwen2.5-3B_0509,Qwen2.5-3B,Casual Conversation,509,510,2
+author_retest,RETEST_ITEM_001,A_0412,RESP_HingGPT_0792,HingGPT,Casual Conversation,792,793,3
+author_retest,RETEST_ITEM_002,A_0232,RESP_HingGPT_0945,HingGPT,Social Media Posts,945,946,1
+author_retest,RETEST_ITEM_003,A_0237,RESP_Phi-3.5-mini_0566,Phi-3.5-mini,Casual Conversation,566,567,4
+author_retest,RETEST_ITEM_004,A_0046,RESP_Qwen2.5-3B_0200,Qwen2.5-3B,Casual Conversation,200,201,3
+author_retest,RETEST_ITEM_005,A_0053,RESP_Qwen2.5-7B_0134,Qwen2.5-7B,Casual Conversation,134,135,2
+author_retest,RETEST_ITEM_006,A_0310,RESP_HingGPT_0361,HingGPT,Casual Conversation,361,362,2
+author_retest,RETEST_ITEM_007,A_0312,RESP_Qwen2.5-7B_0905,Qwen2.5-7B,Casual Conversation,905,906,3
+author_retest,RETEST_ITEM_008,A_0198,RESP_Qwen2.5-3B_0117,Qwen2.5-3B,Social Media Posts,117,118,3
+author_retest,RETEST_ITEM_009,A_0107,RESP_HingGPT_0404,HingGPT,Casual Conversation,404,405,1
+author_retest,RETEST_ITEM_010,A_0422,RESP_Phi-3.5-mini_0664,Phi-3.5-mini,Captions & One-liners,664,665,3
+author_retest,RETEST_ITEM_011,A_0003,RESP_Qwen2.5-7B_0618,Qwen2.5-7B,Casual Conversation,618,619,1
+author_retest,RETEST_ITEM_012,A_0405,RESP_Phi-3.5-mini_0497,Phi-3.5-mini,Social Media Posts,497,498,3
+author_retest,RETEST_ITEM_013,A_0467,RESP_Phi-3.5-mini_0183,Phi-3.5-mini,Social Media Posts,183,184,4
+author_retest,RETEST_ITEM_014,A_0199,RESP_Qwen2.5-3B_0029,Qwen2.5-3B,Social Media Posts,29,30,2
+author_retest,RETEST_ITEM_015,A_0109,RESP_Phi-3.5-mini_0044,Phi-3.5-mini,Casual Conversation,44,45,1
+author_retest,RETEST_ITEM_016,A_0072,RESP_Phi-3.5-mini_0145,Phi-3.5-mini,Social Media Posts,145,146,1
+author_retest,RETEST_ITEM_017,A_0385,RESP_Qwen2.5-3B_0533,Qwen2.5-3B,Social Media Posts,533,534,3
+author_retest,RETEST_ITEM_018,A_0005,RESP_Phi-3.5-mini_0037,Phi-3.5-mini,Casual Conversation,37,38,2
+author_retest,RETEST_ITEM_019,A_0178,RESP_HingGPT_0054,HingGPT,Captions & One-liners,54,55,2
+author_retest,RETEST_ITEM_020,A_0287,RESP_Phi-3.5-mini_0057,Phi-3.5-mini,News & Explainers,57,58,3
+author_retest,RETEST_ITEM_021,A_0118,RESP_Qwen2.5-3B_0714,Qwen2.5-3B,Casual Conversation,714,715,3
+author_retest,RETEST_ITEM_022,A_0331,RESP_Phi-3.5-mini_0318,Phi-3.5-mini,Captions & One-liners,318,319,3
+author_retest,RETEST_ITEM_023,A_0208,RESP_Qwen2.5-3B_0669,Qwen2.5-3B,Captions & One-liners,669,670,3
+author_retest,RETEST_ITEM_024,A_0014,RESP_Qwen2.5-3B_0821,Qwen2.5-3B,Casual Conversation,821,822,4
+author_retest,RETEST_ITEM_025,A_0244,RESP_HingGPT_0469,HingGPT,Casual Conversation,469,470,3
+author_retest,RETEST_ITEM_026,A_0475,RESP_HingGPT_0616,HingGPT,Casual Conversation,616,617,3
+author_retest,RETEST_ITEM_027,A_0157,RESP_Qwen2.5-7B_0127,Qwen2.5-7B,Casual Conversation,127,128,2
+author_retest,RETEST_ITEM_028,A_0184,RESP_Qwen2.5-3B_0311,Qwen2.5-3B,News & Explainers,311,312,4
+author_retest,RETEST_ITEM_029,A_0494,RESP_Qwen2.5-7B_0640,Qwen2.5-7B,Casual Conversation,640,641,2
+author_retest,RETEST_ITEM_030,A_0394,RESP_Qwen2.5-7B_0014,Qwen2.5-7B,Casual Conversation,14,15,2
+author_retest,RETEST_ITEM_031,A_0130,RESP_Qwen2.5-7B_0288,Qwen2.5-7B,Captions & One-liners,288,289,2
+author_retest,RETEST_ITEM_032,A_0088,RESP_HingGPT_0835,HingGPT,News & Explainers,835,836,1
+author_retest,RETEST_ITEM_033,A_0290,RESP_HingGPT_0840,HingGPT,Social Media Posts,840,841,4
+author_retest,RETEST_ITEM_034,A_0236,RESP_Phi-3.5-mini_0540,Phi-3.5-mini,Casual Conversation,540,541,3
+author_retest,RETEST_ITEM_035,A_0323,RESP_HingGPT_0001,HingGPT,Captions & One-liners,1,2,3
+author_retest,RETEST_ITEM_036,A_0284,RESP_Qwen2.5-3B_0893,Qwen2.5-3B,Casual Conversation,893,894,3
+author_retest,RETEST_ITEM_037,A_0238,RESP_Phi-3.5-mini_0008,Phi-3.5-mini,Casual Conversation,8,9,2
+author_retest,RETEST_ITEM_038,A_0464,RESP_HingGPT_0806,HingGPT,Social Media Posts,806,807,1
+author_retest,RETEST_ITEM_039,A_0193,RESP_Qwen2.5-3B_0094,Qwen2.5-3B,Casual Conversation,94,95,2
+author_retest,RETEST_ITEM_040,A_0131,RESP_Phi-3.5-mini_0948,Phi-3.5-mini,Casual Conversation,948,949,2
+author_retest,RETEST_ITEM_041,A_0192,RESP_Phi-3.5-mini_0869,Phi-3.5-mini,Casual Conversation,869,870,3
+author_retest,RETEST_ITEM_042,A_0447,RESP_Qwen2.5-3B_0068,Qwen2.5-3B,Casual Conversation,68,69,3
+author_retest,RETEST_ITEM_043,A_0402,RESP_Qwen2.5-3B_0596,Qwen2.5-3B,Captions & One-liners,596,597,3
+author_retest,RETEST_ITEM_044,A_0458,RESP_HingGPT_0416,HingGPT,Casual Conversation,416,417,3
+author_retest,RETEST_ITEM_045,A_0218,RESP_Qwen2.5-7B_0354,Qwen2.5-7B,Casual Conversation,354,355,2
+author_retest,RETEST_ITEM_046,A_0217,RESP_Phi-3.5-mini_0683,Phi-3.5-mini,Casual Conversation,683,684,3
+author_retest,RETEST_ITEM_047,A_0165,RESP_Qwen2.5-3B_0509,Qwen2.5-3B,Casual Conversation,509,510,2
+author_retest,RETEST_ITEM_048,A_0253,RESP_Qwen2.5-7B_0739,Qwen2.5-7B,Captions & One-liners,739,740,3
+author_retest,RETEST_ITEM_049,A_0077,RESP_HingGPT_0369,HingGPT,Social Media Posts,369,370,3
+author_retest,RETEST_ITEM_050,A_0176,RESP_Qwen2.5-7B_0649,Qwen2.5-7B,Casual Conversation,649,650,2
+author_retest,RETEST_ITEM_051,A_0055,RESP_Phi-3.5-mini_0850,Phi-3.5-mini,Captions & One-liners,850,851,1
+author_retest,RETEST_ITEM_052,A_0210,RESP_Qwen2.5-7B_0707,Qwen2.5-7B,Casual Conversation,707,708,2
+author_retest,RETEST_ITEM_053,A_0203,RESP_Qwen2.5-7B_0633,Qwen2.5-7B,Casual Conversation,633,634,3
+author_retest,RETEST_ITEM_054,A_0211,RESP_HingGPT_0738,HingGPT,Casual Conversation,738,739,3
+author_retest,RETEST_ITEM_055,A_0281,RESP_Qwen2.5-7B_0358,Qwen2.5-7B,News & Explainers,358,359,2
+author_retest,RETEST_ITEM_056,A_0397,RESP_Qwen2.5-3B_0559,Qwen2.5-3B,Customer Support Dialogues,559,560,2
+author_retest,RETEST_ITEM_057,A_0111,RESP_Qwen2.5-3B_0700,Qwen2.5-3B,Casual Conversation,700,701,3
+author_retest,RETEST_ITEM_058,A_0242,RESP_HingGPT_0889,HingGPT,Casual Conversation,889,890,2
+author_retest,RETEST_ITEM_059,A_0158,RESP_Qwen2.5-7B_0850,Qwen2.5-7B,Captions & One-liners,850,851,3
+author_retest,RETEST_ITEM_060,A_0040,RESP_Qwen2.5-7B_0033,Qwen2.5-7B,Casual Conversation,33,34,1
+author_retest,RETEST_ITEM_061,A_0308,RESP_Phi-3.5-mini_0504,Phi-3.5-mini,Casual Conversation,504,505,2
+author_retest,RETEST_ITEM_062,A_0476,RESP_Phi-3.5-mini_0213,Phi-3.5-mini,Captions & One-liners,213,214,2
+author_retest,RETEST_ITEM_063,A_0061,RESP_Phi-3.5-mini_0909,Phi-3.5-mini,Captions & One-liners,909,910,1
+author_retest,RETEST_ITEM_064,A_0081,RESP_Qwen2.5-3B_0641,Qwen2.5-3B,News & Explainers,641,642,3
+author_retest,RETEST_ITEM_065,A_0200,RESP_Qwen2.5-3B_0599,Qwen2.5-3B,Casual Conversation,599,600,4
+author_retest,RETEST_ITEM_066,A_0248,RESP_Qwen2.5-3B_0234,Qwen2.5-3B,Casual Conversation,234,235,2
+author_retest,RETEST_ITEM_067,A_0020,RESP_HingGPT_0725,HingGPT,Casual Conversation,725,726,1
+author_retest,RETEST_ITEM_068,A_0471,RESP_Qwen2.5-7B_0146,Qwen2.5-7B,Captions & One-liners,146,147,1
+author_retest,RETEST_ITEM_069,A_0191,RESP_Phi-3.5-mini_0061,Phi-3.5-mini,Casual Conversation,61,62,2
+author_retest,RETEST_ITEM_070,A_0133,RESP_Phi-3.5-mini_0480,Phi-3.5-mini,Social Media Posts,480,481,1
+author_retest,RETEST_ITEM_071,A_0092,RESP_Qwen2.5-3B_0065,Qwen2.5-3B,Advice & Opinions,65,66,1
+author_retest,RETEST_ITEM_072,A_0125,RESP_Qwen2.5-7B_0203,Qwen2.5-7B,Casual Conversation,203,204,1
+author_retest,RETEST_ITEM_073,A_0387,RESP_HingGPT_0729,HingGPT,Casual Conversation,729,730,2
+author_retest,RETEST_ITEM_074,A_0181,RESP_HingGPT_0767,HingGPT,Casual Conversation,767,768,1
+author_retest,RETEST_ITEM_075,A_0418,RESP_HingGPT_0661,HingGPT,Captions & One-liners,661,662,2
+author_retest,RETEST_ITEM_076,A_0301,RESP_Qwen2.5-3B_0041,Qwen2.5-3B,Captions & One-liners,41,42,3
+author_retest,RETEST_ITEM_077,A_0429,RESP_Phi-3.5-mini_0473,Phi-3.5-mini,Casual Conversation,473,474,3
+author_retest,RETEST_ITEM_078,A_0483,RESP_Phi-3.5-mini_0099,Phi-3.5-mini,Social Media Posts,99,100,3
+author_retest,RETEST_ITEM_079,A_0489,RESP_Qwen2.5-3B_0581,Qwen2.5-3B,Captions & One-liners,581,582,2
+author_retest,RETEST_ITEM_080,A_0250,RESP_Phi-3.5-mini_0804,Phi-3.5-mini,Casual Conversation,804,805,4
+author_retest,RETEST_ITEM_081,A_0202,RESP_HingGPT_0794,HingGPT,Casual Conversation,794,795,2
+author_retest,RETEST_ITEM_082,A_0461,RESP_Phi-3.5-mini_0927,Phi-3.5-mini,Casual Conversation,927,928,2
+author_retest,RETEST_ITEM_083,A_0411,RESP_Qwen2.5-7B_0983,Qwen2.5-7B,Casual Conversation,983,984,4
+author_retest,RETEST_ITEM_084,A_0119,RESP_HingGPT_0317,HingGPT,News & Explainers,317,318,1
+author_retest,RETEST_ITEM_085,A_0140,RESP_HingGPT_0656,HingGPT,Casual Conversation,656,657,3
+author_retest,RETEST_ITEM_086,A_0066,RESP_Qwen2.5-3B_0108,Qwen2.5-3B,Social Media Posts,108,109,4
+author_retest,RETEST_ITEM_087,A_0168,RESP_Qwen2.5-3B_0397,Qwen2.5-3B,Casual Conversation,397,398,2
+author_retest,RETEST_ITEM_088,A_0185,RESP_Qwen2.5-7B_0914,Qwen2.5-7B,Social Media Posts,914,915,4
+author_retest,RETEST_ITEM_089,A_0454,RESP_Qwen2.5-7B_0317,Qwen2.5-7B,News & Explainers,317,318,2
+author_retest,RETEST_ITEM_090,A_0254,RESP_HingGPT_0636,HingGPT,Advice & Opinions,636,637,3
+author_retest,RETEST_ITEM_091,A_0221,RESP_Phi-3.5-mini_0852,Phi-3.5-mini,Casual Conversation,852,853,3
+author_retest,RETEST_ITEM_092,A_0214,RESP_Qwen2.5-7B_0989,Qwen2.5-7B,Casual Conversation,989,990,1
+author_retest,RETEST_ITEM_093,A_0486,RESP_HingGPT_0187,HingGPT,Social Media Posts,187,188,3
+author_retest,RETEST_ITEM_094,A_0371,RESP_Qwen2.5-7B_0515,Qwen2.5-7B,Casual Conversation,515,516,2
+author_retest,RETEST_ITEM_095,A_0094,RESP_Qwen2.5-7B_0189,Qwen2.5-7B,Casual Conversation,189,190,1
+author_retest,RETEST_ITEM_096,A_0470,RESP_Qwen2.5-3B_0506,Qwen2.5-3B,Casual Conversation,506,507,3
+author_retest,RETEST_ITEM_097,A_0450,RESP_Qwen2.5-3B_0931,Qwen2.5-3B,Casual Conversation,931,932,3
+author_retest,RETEST_ITEM_098,A_0083,RESP_Qwen2.5-7B_0328,Qwen2.5-7B,Social Media Posts,328,329,3
+author_retest,RETEST_ITEM_099,A_0141,RESP_HingGPT_0396,HingGPT,Captions & One-liners,396,397,2
+author_retest,RETEST_ITEM_100,A_0462,RESP_Qwen2.5-7B_0289,Qwen2.5-7B,Casual Conversation,289,290,3
