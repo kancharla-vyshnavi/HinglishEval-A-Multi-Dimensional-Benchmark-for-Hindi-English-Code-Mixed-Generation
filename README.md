@@ -1,4 +1,4 @@
-**HINGLISHEVAL: A MULTI-DIMENSIONAL BENCHMARK FOR HINDI-ENGLISH CODE-MIXED GENERATION **
+## HinglishEval: A Multi-Dimensional Benchmark for Hindi–English Code-Mixed Generation
 
 <p align="center">
   <strong>Do Large Language Models Actually Write Natural Hinglish?</strong>
