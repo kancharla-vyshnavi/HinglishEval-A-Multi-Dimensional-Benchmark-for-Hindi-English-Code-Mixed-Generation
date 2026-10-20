@@ -1,0 +1,9 @@
+model,annotator,n_responses,fluency_mean,fluency_std,code_mixing_naturalness_mean,code_mixing_naturalness_std,hindi_grammar_mean,hindi_grammar_std,prompt_adherence_mean,prompt_adherence_std,spelling_consistency_mean,spelling_consistency_std,overall_mean,overall_std
+Qwen2.5-7B,Annotator A (Lead),1000,2.048,0.553,2.603,0.576,2.755,0.588,2.42,0.586,2.494,0.703,1.616,0.817
+Qwen2.5-7B,Annotator B (Partner),1000,2.739,0.589,2.623,0.813,2.972,0.776,2.897,0.787,2.953,0.782,2.837,0.68
+Qwen2.5-3B,Annotator A (Lead),1000,2.061,0.546,2.612,0.567,2.782,0.579,2.431,0.581,2.528,0.722,1.62,0.832
+Qwen2.5-3B,Annotator B (Partner),1000,2.737,0.59,2.62,0.806,2.986,0.809,2.902,0.807,2.975,0.758,2.822,0.696
+HingGPT,Annotator A (Lead),1000,2.012,0.533,2.554,0.608,2.713,0.644,2.352,0.59,2.449,0.751,1.519,0.755
+HingGPT,Annotator B (Partner),1000,2.709,0.604,2.613,0.812,2.977,0.796,2.911,0.797,2.939,0.771,2.83,0.667
+Phi-3.5-mini,Annotator A (Lead),1000,1.997,0.509,2.547,0.61,2.709,0.623,2.349,0.598,2.415,0.745,1.449,0.704
+Phi-3.5-mini,Annotator B (Partner),1000,2.72,0.598,2.57,0.807,2.945,0.795,2.88,0.784,2.961,0.786,2.779,0.692

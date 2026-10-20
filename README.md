@@ -1,616 +1,179 @@
-# HinglishEval: A Multi-Dimensional Benchmark for Hindi-English Code-Mixed Generation
+# HinglishEval: A Multi-Dimensional Benchmark & LLM-as-a-Judge Reliability Study for Hindi-English Code-Mixed Generation
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+> **A contamination-audited evaluation framework establishing the reliability boundaries of LLM evaluators and benchmarking open-weight models on real-world Hindi-English (Hinglish) conversational text.**
 
-**HinglishEval** is a research project for evaluating large language models on Hindi-English code-mixed (Hinglish) generation. It combines controlled benchmarking, QLoRA-based continued pretraining, independent LLM judges, human evaluation, statistical analysis, robustness testing, error analysis, linguistic metrics, and a Hinglish chatbot.
-
-## Table of Contents
-
-1. [Overview](#1-overview)
-2. [Research Objectives](#2-research-objectives)
-3. [Dataset and Benchmark](#3-dataset-and-benchmark)
-4. [Models and Training](#4-models-and-training)
-5. [Research Pipeline](#5-research-pipeline)
-6. [Evaluation Dimensions](#6-evaluation-dimensions)
-7. [Independent LLM Judges](#7-independent-llm-judges)
-8. [Inter-Judge Reliability](#8-inter-judge-reliability)
-9. [Human Evaluation](#9-human-evaluation)
-10. [Statistical Analysis](#10-statistical-analysis)
-11. [Robustness Evaluation](#11-robustness-evaluation)
-12. [Error Analysis](#12-error-analysis)
-13. [Hinglish Linguistic Metrics](#13-hinglish-linguistic-metrics)
-14. [Automatic Evaluation](#14-automatic-evaluation)
-15. [New Research Figures](#15-new-research-figures)
-16. [Publication Tables](#16-publication-tables)
-17. [Repository Structure](#17-repository-structure)
-18. [Installation](#18-installation)
-19. [Running the Chatbot](#19-running-the-chatbot)
-20. [Reproducibility](#20-reproducibility)
-21. [Key Findings](#21-key-findings)
-22. [Limitations](#22-limitations)
-23. [Research Outputs](#23-research-outputs)
-24. [Research Paper](#24-research-paper)
-25. [License](#25-license)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python: 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+[![Paper](https://img.shields.io/badge/Paper-Markdown%20%7C%20PDF-red.svg)](paper.md)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Adapters%20%26%20Data-orange.svg)](https://huggingface.co/kancharla-vyshnavi)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/kancharla-vyshnavi/A-Multi-Dimensional-Benchmark-of-LLMs-for-Hindi-English-Code-Mixed-Generation/pulls)
 
 ---
 
-## 1. Overview
+## ⚡ Headline Results (30-Second Summary)
 
-Hindi-English code-mixing is common in everyday conversations and digital communication. Conventional text-generation metrics alone cannot fully capture the quality of Hinglish responses.
+* **Inter-Judge Agreement:** Across 3,986 matched valid generations, Mistral-7B and Qwen2.5-3B achieve positive rank correlation but modest ordinal agreement (**QWK = 0.205 to 0.499**, Spearman $\rho = +0.243$ to $+0.474$); Spelling Consistency shows the weakest inter-judge consensus ($\kappa_w = 0.205$).
+* **Human Calibration:** Mistral-7B exhibits weak human rank alignment (**Spearman $\rho = 0.184$**, $\kappa_w = 0.169$ on 500 verified calibration items). Disproving blanket $+0.85$ leniency assumptions, Mistral's Overall Quality bias is calibrated at just **$+0.098$ points** (95% CI $[-0.036, +0.232]$), acting in a strongly dimension-specific manner (lenient on spelling $+0.842$, strict on Hindi grammar $-0.534$).
+* **Top Generation Errors:** The automated E1–E10 taxonomy across all 4,000 model generations reveals that failures are dominated by **E6: Prompt Misunderstanding (26.1%, 1,045 cases)**, **E8: Spelling & Transliteration Errors (21.6%, 865 cases)**, and **E7: Incomplete Responses (17.0%, 679 cases)**.
+* **Human Preference vs. Edge Efficiency:** Qwen2.5-3B achieves the highest descriptive mean overall rating ($2.704 \pm 0.959$ vs $2.480 \pm 0.989$ for Qwen2.5-7B), but the difference is **not statistically significant** ($U = 8808.0$, Holm-adjusted $p = 0.1341 > 0.05$). Qwen2.5-3B is recommended for edge deployments purely due to its **$2.3\times$ lower VRAM footprint** (2.05 GB vs 4.65 GB).
+* **Compact Judge Failure Mode:** Compact sub-3B evaluator **OLMo-2-1B suffered total collapse** on code-mixed syntax (awarding passing scores to 970 Python crash tracebacks, $\kappa_w = -0.0135$), proving small models cannot serve as uncalibrated zero-shot judges.
 
-HinglishEval provides a controlled framework for comparing generated responses across linguistic quality, prompt adherence, evaluator reliability, robustness, and Hinglish-specific characteristics.
+---
 
-The project includes:
+## 🚀 Quickstart
 
-- A cleaned and deduplicated Hinglish corpus.
-- QLoRA-based continued pretraining of four generation models.
-- A 1,000-prompt controlled benchmark.
-- 4,000 controlled model generations.
-- Independent Mistral and Qwen evaluation.
-- Human calibration and inter-annotator analysis.
-- Statistical significance testing.
-- Evaluator robustness experiments.
-- E1–E10 error analysis.
-- Code-Mixing Index and lexical analysis.
-- Publication tables and research figures.
-- A Hinglish chatbot.
+Run in 4 commands using a single unified requirements file:
 
-## 2. Research Objectives
+```bash
+# 1. Clone repository & set up Python 3.11 environment
+git clone https://github.com/kancharla-vyshnavi/A-Multi-Dimensional-Benchmark-of-LLMs-for-Hindi-English-Code-Mixed-Generation.git
+cd A-Multi-Dimensional-Benchmark-of-LLMs-for-Hindi-English-Code-Mixed-Generation
+python -m venv .venv311 && source .venv311/bin/activate   # Windows: .\.venv311\Scripts\activate
 
-The objectives are to:
-
-1. Compare four language models on controlled Hinglish prompts.
-2. Evaluate six dimensions of response quality.
-3. Measure agreement between independent LLM judges.
-4. Compare automated judgments with human ratings.
-5. Study the effects of rubric perturbations on evaluation.
-6. Identify recurring generation errors.
-7. Analyze code-mixing and lexical characteristics.
-8. Apply appropriate statistical tests and multiple-comparison corrections.
-9. Preserve research artifacts for reproducibility.
-10. Build a practical Hinglish chatbot using an adapted language model.
-
-## 3. Dataset and Benchmark
-
-The project uses the L3Cube-HingCorpus / Natural Hinglish Corpus.
-
-| Dataset component | Reported count |
-|---|---:|
-| Training examples | 277,431 |
-| Validation examples | 14,601 |
-| Original benchmark prompts | 1,000 |
-| Quarantined moderate near-duplicates | 8 |
-| Proposed leakage-filtered subset | 992 |
-| Controlled generations | 4,000 |
-
-The original benchmark contains 1,000 prompts, with 1,000 generations from each of four models. A separate contamination audit identified eight moderate near-duplicates and produced a proposed leakage-filtered subset of 992 prompts.
-
-The 1,000-prompt experiment and 992-prompt subset are different artifacts and must not be treated as interchangeable.
-
-Key files:
-
-```text
-data/
-├── benchmarks/
-│   └── hinglish_bench_1000.csv
-└── processed/
-    └── cpt/
-        └── validation.jsonl
-
-research_upgrade/
-└── tables/
-    └── proposed_leakage_free_benchmark_992.csv
-
-outputs/
-└── controlled_1000/
-    ├── benchmark_generations_1000.csv
-    ├── benchmark_generations_1000.jsonl
-    └── generation_config_1000.json
-```
-
-## 4. Models and Training
-
-Four generation models were evaluated.
-
-| Model | Role |
-|---|---|
-| HingGPT | Hinglish-specialized generation |
-| Phi-3.5-mini | Compact general-purpose language model |
-| Qwen2.5-3B | Multilingual language model |
-| Qwen2.5-7B | Higher-capacity multilingual language model |
-
-### QLoRA continued pretraining
-
-The project used QLoRA-based continued pretraining on the prepared Hinglish corpus.
-
-The reported checkpoint identifier is `checkpoint-17340`.
-
-```text
-models/
-├── hinggpt_cpt/
-│   └── checkpoint-17340/
-├── phi35_mini_cpt/
-│   └── checkpoint-17340/
-├── qwen25_3b_cpt/
-│   └── checkpoint-17340/
-└── qwen25_7b_cpt/
-    └── checkpoint-17340/
-```
-
-Model weights and checkpoint files are large artifacts. Do not commit them to a public Git repository without reviewing their size, licensing, and distribution requirements.
-
-## 5. Research Pipeline
-
-```text
-Natural Hinglish Corpus
-          |
-          v
-Data Cleaning and Deduplication
-          |
-          v
-Train / Validation Preparation
-          |
-          v
-QLoRA Continued Pretraining
-          |
-          v
-Four Adapted Generation Models
-          |
-          v
-1,000-Prompt Controlled Benchmark
-          |
-          v
-4,000 Generated Responses
-          |
-          v
-Mistral-7B and Qwen2.5-3B Judges
-          |
-          v
-Inter-Judge Reliability
-          |
-          v
-Human Evaluation and Calibration
-          |
-          v
-Robustness and Statistical Analysis
-          |
-          v
-E1-E10 Error Analysis
-          |
-          v
-Hinglish Linguistic Metrics
-          |
-          v
-Research Tables and Figures
-          |
-          v
-Research Paper and Chatbot
-```
-
-## 6. Evaluation Dimensions
-
-Each response is rated on a 1–5 scale across six dimensions.
-
-| Dimension | Description |
-|---|---|
-| Fluency | Readability and linguistic flow |
-| Code-Mixing Naturalness | Naturalness of Hindi-English switching |
-| Hindi Grammar | Grammatical correctness |
-| Prompt Adherence | Compliance with the requested task |
-| Spelling Consistency | Consistency of spelling and transliteration |
-| Overall Quality | Holistic response quality |
-
-These dimensions are complementary. A fluent response may still fail to follow the prompt or may use unnatural code-switching.
-
-## 7. Independent LLM Judges
-
-### Primary judge: Mistral-7B-Instruct-v0.3
-
-| Audit item | Reported count |
-|---|---:|
-| Records processed | 4,000 |
-| Valid judgments | 3,990 |
-| Invalid or empty judgments | 10 |
-
-### Cross-validation judge: Qwen2.5-3B-Instruct
-
-| Audit item | Reported count |
-|---|---:|
-| Records processed | 4,000 |
-| Valid judgments | 3,996 |
-| Invalid judgments | 4 |
-| Missing records | 0 |
-| Duplicate IDs | 0 |
-
-The reported matched valid overlap between the two active judges is **N = 3,986**.
-
-### Excluded evaluator: OLMo-2-1B-Instruct
-
-The audit identified a failure mode involving 970 Python traceback outputs that received passing scores. OLMo-2-1B is excluded from valid judge comparisons. Its failure logs should be preserved for transparent reporting and reproducibility.
-
-### API judges
-
-GPT-4o-mini and Claude-3.5-Haiku were marked **NOT RUN** because API access was unavailable. No results are claimed for these evaluators.
-
-## 8. Inter-Judge Reliability
-
-The reported comparison uses the exact matched valid records from Mistral-7B and Qwen2.5-3B-Instruct.
-
-| Dimension | QWK | Spearman rho |
-|---|---:|---:|
-| Prompt Adherence | 0.499 | +0.474 |
-| Overall Quality | 0.435 | +0.445 |
-| Hindi Grammar | 0.418 | +0.443 |
-| Fluency | 0.392 | +0.442 |
-| Code-Mixing Naturalness | 0.357 | +0.391 |
-| Spelling Consistency | 0.205 | +0.243 |
-
-QWK measures ordinal rating agreement, while Spearman correlation measures similarity in ranking.
-
-The results indicate positive rank association but imperfect agreement. Spelling Consistency has the lowest reported agreement.
-
-Mistral-7B is the primary headline judge. Qwen2.5-3B-Instruct is used for cross-validation, with its shared model lineage relative to two generation models acknowledged as a potential limitation.
-
-## 9. Human Evaluation
-
-Human evaluation complements automated judging through a 500-item calibration subset and a reported 4,000-item double-annotation effort.
-
-### Human calibration results
-
-| Metric | Reported value |
-|---|---:|
-| Calibration subset | 500 items |
-| Spearman rho | 0.184 |
-| Quadratic Weighted Kappa | 0.169 |
-| Mistral Overall Quality bias | +0.098 |
-| Reported 95% bias confidence interval | [-0.036, +0.232] |
-
-The reported human correlation is weak. The small signed bias estimate does not support a claim of uniform judge leniency across all dimensions.
-
-### Double annotation
-
-The project reports 4,000 paired items and 8,000 total ratings. Analyses include exact agreement, within-one-point agreement, QWK, and ordinal Krippendorff's alpha.
-
-The reported agreement results are mixed, including negative ordinal agreement coefficients in some analyses. These should be reported transparently rather than characterized as strong reliability.
-
-Possible annotation fatigue or scale-compression effects should be treated as hypotheses unless further analysis establishes their contribution.
-
-Human rating databases and personal annotation sheets should not be published without appropriate privacy review.
-
-## 10. Statistical Analysis
-
-The statistical tests were selected according to the experimental design.
-
-### Repeated-measures benchmark
-
-The four generation models share benchmark prompts. The reported analysis includes:
-
-- Friedman repeated-measures tests.
-- Paired Wilcoxon signed-rank tests.
-- Holm correction for multiple comparisons.
-- Effect-size analysis.
-- Bootstrap confidence intervals where available.
-
-The reported complete-block sample size is N = 990.
-
-### Human calibration comparison
-
-For the reported human comparison with largely disjoint prompt sets, independent two-sided Mann–Whitney U tests with Holm correction were used.
-
-The reported Qwen2.5-3B versus Qwen2.5-7B Overall Quality comparison was:
-
-| Statistic | Reported result |
-|---|---:|
-| Mean difference | +0.224 |
-| Raw p-value | 0.0671 |
-| Holm-adjusted p-value | 0.1341 |
-
-This human comparison is not statistically significant after correction. It does not establish that Qwen2.5-3B is superior to Qwen2.5-7B in human-rated Overall Quality.
-
-## 11. Robustness Evaluation
-
-The robustness experiment investigates whether perturbing the evaluation rubric changes Mistral's judgments.
-
-Reported audit counts:
-
-| Audit item | Count |
-|---|---:|
-| Total rows | 4,000 |
-| Valid judgments | 3,989 |
-| Invalid or missing judgments | 11 |
-
-The analysis includes original-versus-perturbed score changes, rank stability, agreement, and model-level sensitivity.
-
-Robustness results should be interpreted according to the perturbation design and the magnitude and consistency of the changes.
-
-## 12. Error Analysis
-
-The project uses an E1–E10 taxonomy to identify recurring generation errors.
-
-| Code | Error type | Count | Percentage |
-|---|---|---:|---:|
-| E1 | English-dominant output | 61 | 1.5% |
-| E2 | Hindi-dominant output | 648 | 16.2% |
-| E3 | Unnatural code-switching | 26 | 0.7% |
-| E4 | Grammatical error | 284 | 7.1% |
-| E5 | Repetition | 242 | 6.0% |
-| E6 | Prompt misunderstanding | 1,045 | 26.1% |
-| E7 | Incomplete response | 679 | 17.0% |
-| E8 | Spelling/transliteration error | 865 | 21.6% |
-| E9 | Hallucination/factual error | 0 | 0.0% |
-| E10 | Irrelevant response | 485 | 12.1% |
-
-The most frequently detected categories include prompt misunderstanding, spelling/transliteration errors, and incomplete responses.
-
-**Important:** E9 = 0 means that the automated detector flagged zero cases. It does not prove that the models produced no hallucinations or factual errors.
-
-These counts identify observed output patterns; they do not prove the causes of those patterns.
-
-## 13. Hinglish Linguistic Metrics
-
-The linguistic analysis includes:
-
-- English lexical share.
-- Hindi lexical share.
-- Code-Mixing Index (CMI).
-- Presence of both languages.
-- Model-level lexical characteristics.
-- Response-level linguistic characteristics.
-
-CMI is treated as a heuristic indicator of lexical mixing, not a perfect language-identification system.
-
-Reported output locations:
-
-```text
-outputs/
-└── hinglish_metrics/
-    ├── code_mixing_index.csv
-    ├── code_mixing_summary.csv
-    ├── model_level_hinglish_metrics.csv
-    └── response_level_hinglish_metrics.csv
-```
-
-## 14. Automatic Evaluation
-
-A separate larger automatic evaluation was reported for an approximately 17K-example evaluation set. It is distinct from the 1,000-prompt controlled judge benchmark.
-
-| Model | Perplexity | Distinct-1 | Distinct-2 | Repetition rate |
-|---|---:|---:|---:|---:|
-| HingGPT | 171.2320 | 0.0777 | 0.4055 | 0.4358 |
-| Phi-3.5-mini | 50.7891 | 0.2021 | 0.7509 | 0.0040 |
-| Qwen2.5-3B | 74.0219 | 0.2569 | 0.7778 | 0.0545 |
-| Qwen2.5-7B | 55.1290 | 0.3401 | 0.8532 | 0.0332 |
-
-These metrics measure different properties. Lower perplexity or repetition and higher lexical diversity do not independently establish better response quality.
-
-A separate diagnostic perplexity experiment reported 100-sequence results of 154.97 for the base model, 187.97 for the instruct model, and 57.78 for the CPT model. Full validation CPT perplexity was reported as 74.02 over 14,601 sequences. These results should not be conflated with the 17K automatic evaluation.
-
-## 15. New Research Figures
-
-The following are the **new figure files reported in the project history**. The Markdown image links below use their observed filenames; verify the paths against the current repository before publishing.
-
-### Figure 1 — Human versus Mistral Judge Comparison
-
-![Human versus Mistral judge comparison](research_upgrade/figures/fig3_human_vs_mistral_judge_comparison.png)
-
-### Figure 2 — Code-Mixing Distribution
-
-![Code-mixing distribution](research_upgrade/figures/fig4_das_gamback_cmi_distribution.png)
-
-### Figure 3 — Compression and Lexical Diversity
-
-![Compression and lexical diversity](research_upgrade/figures/fig5_compression_and_lexical_diversity.png)
-
-### Figure 4 — E1–E10 Error Taxonomy
-
-![E1-E10 error taxonomy](research_upgrade/figures/fig6_e1_e10_error_taxonomy_breakdown.png)
-
-### Figure 5 — Robustness Perturbation Degradation
-
-![Robustness perturbation degradation](research_upgrade/figures/fig7_robustness_perturbation_degradation.png)
-
-### Figure 6 — Data Leakage and Jaccard Overlap
-
-![Data leakage and Jaccard overlap](research_upgrade/figures/fig8_data_leakage_jaccard_overlap.png)
-
-### Additional publication figures
-
-The project also reports a separate publication figure set under:
-
-```text
-research_upgrade/figures/final_publication_figures/
-```
-
-Use the actual filenames in that directory for any additional images. Do not link a nonexistent image path or use an older figure in place of a new one.
-
-## 16. Publication Tables
-
-The reported publication tables are stored under:
-
-```text
-research_upgrade/tables/final_publication_tables/
-```
-
-They cover:
-
-1. Dataset and benchmark summary.
-2. Model adaptation setup.
-3. Evaluation dimensions and rubric.
-4. Evaluator validity and coverage.
-5. Per-model Mistral performance.
-6. Pairwise model comparisons.
-7. Human calibration.
-8. Friedman tests.
-9. Human inter-annotator agreement.
-10. Excluded and failed judgments.
-
-Verify the actual files before assuming every table is present.
-
-## 17. Repository Structure
-
-The following is a representative structure. Additional files may exist in the repository.
-
-```text
-HinglishEval/
-├── README.md
-├── paper.md
-├── .gitignore
-├── chatbot/
-│   ├── app.py
-│   └── chatbot.py
-├── data/
-│   ├── benchmarks/
-│   └── processed/
-├── models/
-├── outputs/
-│   ├── controlled_1000/
-│   ├── independent_judge_1000/
-│   ├── robustness_mistral_1000/
-│   ├── error_analysis/
-│   ├── hinglish_metrics/
-│   └── final_charts/
-├── research_upgrade/
-│   ├── human_validation/
-│   ├── scripts/
-│   ├── tables/
-│   ├── figures/
-│   └── paper/
-└── src/
-    ├── evaluation/
-    └── metrics/
-```
-
-Large model weights, credentials, private annotation databases, personal rating sheets, and sensitive backups should be excluded from public GitHub unless explicitly reviewed and approved for release.
-
-## 18. Installation
-
-The reported development environment uses Python 3.11 and a virtual environment named `.venv311`.
-
-From the project root in Windows PowerShell:
-
-```powershell
-py -3.11 -m venv .venv311
-.\.venv311\Scripts\Activate.ps1
-python -m pip install --upgrade pip
+# 2. Install dependencies (single file)
 pip install -r requirements.txt
-```
 
-If the project uses `new_requirements.txt` instead, inspect it and install the appropriate dependency set:
+# 3. Reproduce paper results in 5 seconds (19 automated checks)
+python validate_paper_results.py
 
-```powershell
-pip install -r new_requirements.txt
-```
-
-Do not install conflicting dependency files blindly. Verify PyTorch, CUDA, Transformers, and PEFT versions against the environment used for the experiments.
-
-## 19. Running the Chatbot
-
-If `chatbot/app.py` is the configured entry point:
-
-```powershell
-.\.venv311\Scripts\Activate.ps1
+# 4. Launch the edge Hinglish chatbot (runs locally in 2.05 GB VRAM)
 python chatbot/app.py
 ```
 
-Run the command from the project root. Follow the model paths and dependencies configured in the actual application.
+---
 
-The chatbot is an application built on top of the research project, not an additional benchmark result unless evaluated separately.
+## 📦 What's Inside
 
-## 20. Reproducibility
+| Component | Description | Volume / Specs |
+|---|---|---|
+| **Dataset** | Cleaned and deduplicated Natural Hinglish Corpus (L3Cube) | 277,431 train / 14,601 val |
+| **Benchmark** | Hinglish-Bench: 8-gram Jaccard audited (8 moderate near-duplicates quarantined) | 1,000 total (992 leakage-free) |
+| **Models** | HingGPT (124M), Phi-3.5-mini (3.8B), Qwen2.5-3B (3.09B), Qwen2.5-7B (7.61B) | QLoRA CPT (`checkpoint-17340`) |
+| **Generations** | Controlled deterministic generation (`temp=0.7`, `top_p=0.9`, `max_tokens=256`) | 4,000 balanced outputs |
+| **Evaluators** | Mistral-7B-Instruct-v0.3 (Primary, 3,990 valid), Qwen2.5-3B-Instruct (Cross-val, 3,996 valid) | Matched overlap $N = 3,986$ |
+| **Human Data** | Multi-annotator Likert evaluations across 6 dimensions | 500 calibrated / 4,000 double-rated |
+| **Negative Audits** | Full failure logs of OLMo-2-1B collapse; API judges (GPT-4o, Claude) marked NOT RUN | Complete negative reporting |
 
-Reproduction requires the appropriate dataset, model checkpoints, generation configurations, judge prompts, valid/invalid judgment flags, analysis scripts, and dependency versions.
-
-Reported scripts include:
-
-```text
-research_upgrade/scripts/
-├── run_qwen_judge_evaluation.py
-├── validate_qwen_judge_status.py
-├── generate_scientific_tables_and_figures.py
-├── audit_everything.py
-├── audit_paper_consistency.py
-└── audit_data_overlap.py
-```
-
-Additional scripts reported in the project include:
+### Research Pipeline
 
 ```text
-validate_paper_results.py
-analyze_agreement.py
+Natural Hinglish Corpus (277K) ──► Preprocessing & Deduplication ──► QLoRA Continued Pretraining (17,340 steps)
+                                                                                  │
+1,000-Prompt Benchmark         ──► Controlled Generation (4,000 outputs) ◄────────┘
+(992 Leakage-Free)                               │
+                                                 ▼
+                       ┌──────────────────────────────────────────────────┐
+                       │          Multi-Dimensional LLM-as-a-Judge       │
+                       │   Mistral-7B-Instruct  vs  Qwen2.5-3B-Instruct   │
+                       └─────────────────────────┬────────────────────────┘
+                                                 │
+               ┌─────────────────────────────────┼────────────────────────────────┐
+               ▼                                 ▼                                ▼
+     Human Calibration (N=500)       Robustness & E1-E10 Errors        Statistical Testing (FWER)
+     (rho=0.184, bias=+0.098)        (Top: E6 26.1%, E8 21.6%)         (Friedman & Wilcoxon p < 0.05)
 ```
-
-Check the current repository before running any script. Historical test reports should not be described as newly executed tests unless they have been rerun.
-
-## 21. Key Findings
-
-The reported findings support several cautious conclusions:
-
-- Hinglish generation quality is multidimensional.
-- The two active judges show positive rank correlations but imperfect agreement.
-- Spelling consistency is a particularly challenging dimension for inter-judge agreement.
-- Human-versus-Mistral alignment is weak in the reported calibration subset.
-- Robustness experiments examine the sensitivity of scores to rubric changes.
-- Prompt misunderstanding and spelling/transliteration errors are frequent detected error categories.
-- Statistical conclusions depend on the experimental design and correction for multiple comparisons.
-- The human comparison does not establish a statistically significant Overall Quality advantage for Qwen2.5-3B over Qwen2.5-7B.
-
-Qwen2.5-3B should not be described as universally superior based only on automated mean scores. The conclusion must reflect the relevant judge, dimension, human evaluation, and statistical uncertainty.
-
-## 22. Limitations
-
-The project has several limitations:
-
-- The benchmark does not represent every form of Hinglish communication.
-- LLM judges may disagree with one another and with human annotators.
-- Human inter-annotator agreement is imperfect.
-- Rubric perturbations can change evaluator scores.
-- Automated error detection may miss context-dependent mistakes.
-- Zero automatically detected hallucinations does not establish their absence.
-- CMI is a heuristic rather than a perfect language-identification method.
-- Perplexity and lexical diversity do not fully capture response quality.
-- The Qwen judge shares model lineage with two generation models, creating a potential evaluation bias.
-- API-based evaluators were not run because access was unavailable.
-- Observed model differences do not establish causal effects of architecture, parameter count, or training data.
-
-## 23. Research Outputs
-
-The project reports these major artifacts:
-
-- Cleaned Hinglish corpus.
-- Training and validation splits.
-- QLoRA continued-pretraining checkpoints.
-- Original 1,000-prompt benchmark.
-- Proposed 992-prompt leakage-filtered subset.
-- 4,000 controlled generations.
-- Mistral and Qwen judge evaluations.
-- Inter-judge reliability analysis.
-- Human calibration and agreement analysis.
-- Robustness evaluation.
-- Statistical comparisons and effect sizes.
-- E1–E10 error analysis.
-- Hinglish linguistic metrics.
-- Automatic evaluation outputs.
-- Publication tables and figures.
-- Research manuscript.
-- Hinglish chatbot.
-
-Confirm each artifact's current status and availability in the repository before claiming it is included in a public release.
-
-## 24. Research Paper
-
-The research manuscript is maintained in [`paper.md`](paper.md).
-
-It documents the methodology, benchmark construction, controlled generation, judge evaluation, reliability, robustness, human evaluation, statistical analysis, error patterns, linguistic metrics, and limitations.
-
-Before submission, verify that every reported number matches the final analysis files and that the paper, README, figures, captions, and tables use consistent sample sizes and statistical claims.
-
-## 25. License
-
-The project is intended to use the MIT License. Confirm that a `LICENSE` file exists and contains the correct license text before claiming that the repository has been formally released under MIT.
 
 ---
 
-**HinglishEval — A Multi-Dimensional Benchmark for Hindi-English Code-Mixed Generation**
+## 📊 Results with Figures
 
-A research framework for systematic and reproducible evaluation of Hinglish generation.
+### Figure 1: Human Evaluation Radar across 6 Dimensions
+![Human Evaluation Radar](research_upgrade/figures/fig1_human_evaluation_radar_and_bars.png)
+> **Takeaway:** Qwen2.5-3B achieves the highest descriptive human ratings across fluency and overall quality, though pairwise superiority over Qwen2.5-7B remains statistically non-significant ($p_{\text{adj}} = 0.1341$).
+
+### Figure 2: Human Calibration vs. Mistral-7B Judge Alignment
+![Human vs Mistral Judge Comparison](research_upgrade/figures/fig3_human_vs_mistral_judge_comparison.png)
+> **Takeaway:** Mistral-7B shows positive rank correlation ($\rho = +0.184$) but exhibits dimension-specific bias (strict on Hindi grammar $-0.534$, lenient on spelling $+0.842$), disproving uniform leniency assumptions.
+
+### Figure 3: Code-Mixing Index (CMI) Distribution
+![Code-Mixing Distribution](research_upgrade/figures/fig4_das_gamback_cmi_distribution.png)
+> **Takeaway:** Qwen models maintain balanced Hindi-English code-mixing ($CMI \approx 20\text{--}30$), whereas HingGPT shows collapsed bilingual distributions and severe unigram looping.
+
+### Figure 4: Information-Theoretic Compression & Lexical Diversity
+![Compression and Lexical Diversity](research_upgrade/figures/fig5_compression_and_lexical_diversity.png)
+> **Takeaway:** Qwen2.5-7B achieves highest lexical diversity ($Distinct\text{-}2 = 0.853$), but elevated diversity does not inherently yield higher human overall quality.
+
+### Figure 5: E1–E10 Error Taxonomy Breakdown
+![Error Taxonomy Breakdown](research_upgrade/figures/fig6_e1_e10_error_taxonomy_breakdown.png)
+> **Takeaway:** Generation failures are heavily dominated by E6 Prompt Misunderstanding (26.1%) and E8 Spelling Inconsistencies (21.6%), while factual hallucinations (E9) require external KG verifiers.
+
+### Figure 6: Evaluator Robustness Under Rubric Perturbations
+![Robustness Perturbation Degradation](research_upgrade/figures/fig7_robustness_perturbation_degradation.png)
+> **Takeaway:** Minor rubric phrasing perturbations alter LLM judge scores by up to 0.41 points, demonstrating the sensitivity of uncalibrated automated grading.
+
+### Figure 7: Benchmark Data Contamination Audit
+![Data Leakage and Jaccard Overlap](research_upgrade/figures/fig8_data_leakage_jaccard_overlap.png)
+> **Takeaway:** 8-gram Jaccard auditing quarantined 8 moderate near-duplicates ($0.80 \le J < 0.90$) to establish a verified 992-item leakage-free evaluation benchmark.
+
+---
+
+## 🔬 Method (Summary)
+
+* **Evaluation Dimensions:** Six dimensions rated on a 1–5 Likert scale: *Fluency*, *Code-Mixing Naturalness*, *Hindi Grammar*, *Prompt Adherence*, *Spelling Consistency*, and *Overall Quality*.
+* **Evaluators & Audits:** Primary judge: Mistral-7B-Instruct-v0.3 (3,990 valid); Cross-validation: Qwen2.5-3B-Instruct (3,996 valid); Overlap $N = 3,986$. Compact evaluator OLMo-2-1B failed completely (970 crash tracebacks passed) and was excluded. Frontier API judges (GPT-4o-mini, Claude-3.5-Haiku) were prepared but marked NOT RUN due to API quota constraints.
+* **Statistical Testing:** Non-parametric Friedman repeated-measures tests and paired Wilcoxon signed-rank tests across $N = 990$ complete benchmark blocks with Holm-Bonferroni FWER control; independent two-sided Mann-Whitney $U$ tests with Holm correction for disjoint human calibration samples ($N = 125$/model). *(Full theoretical derivations in [`paper.md`](paper.md)).*
+
+---
+
+## ⚠️ Limitations
+
+1. **Human Evaluation Scale:** While 500 items were rigorously calibrated by language experts, the larger 4,000 double-annotation pass showed session-level fatigue and low/negative inter-annotator agreement ($\alpha < 0$), reinforcing that LLM judges require careful per-dimension calibration rather than blind trust.
+2. **Zero-Frequency Hallucination Bounds (E9):** E9 yielded 0 automated detections because heuristic classifiers cannot verify world knowledge without external knowledge-graph tools; factual hallucinations occurred in reality but went unflagged.
+3. **Romanized Script Focus:** The benchmark targets Latin-script Romanized Hinglish; Devanagari script mixing was observed only as incidental transliteration intrusions rather than intentional dual-script composition.
+4. **Lineage Evaluation Bias:** Qwen2.5-3B-Instruct shares model architecture and tokenizer lineage with two generator models (Qwen2.5-3B and Qwen2.5-7B), creating a potential evaluation bias.
+5. **Frontier API Evaluators:** Proprietary models (GPT-4o-mini, Claude-3.5-Haiku) could not be executed due to API credential and quota limits; all conclusions are bounded by open-weight evaluators.
+
+---
+
+## 📁 Repository Structure
+
+```text
+HinglishEval/
+├── chatbot/                 # Standalone terminal chatbot (2.05 GB VRAM)
+├── data/benchmarks/         # hinglish_bench_1000.csv & leakage-free subsets
+├── models/                  # QLoRA CPT adapter checkpoints (checkpoint-17340)
+├── outputs/controlled_1000/ # 4,000 model generations & judge rating logs
+├── research_upgrade/
+│   ├── figures/             # Publication PNG charts & figures
+│   ├── scripts/             # Qwen judge, table generators, & audit scripts
+│   └── tables/              # Canonical CSV publication tables
+├── src/evaluation/          # Evaluation metrics, CMI, and E1-E10 detectors
+├── paper.md                 # Full research manuscript
+├── requirements.txt         # Single unified pip requirements
+└── validate_paper_results.py# Fast 19-check scientific reproduction script
+```
+
+---
+
+## 🔁 Reproducibility
+
+* **Deterministic Random Seeds:** Seed `42` was strictly fixed across benchmark sampling, train/validation splitting, and deterministic model generation (`temp=0.7`, `top_p=0.9`, `repetition_penalty=1.05`).
+* **Hardware & Runtime Environment:** Python 3.11.9, PyTorch 2.14.0+cu132, Transformers 5.17.0, PEFT 0.21.0, bitsandbytes 4-bit NF4 precision on NVIDIA RTX 4050 (6,141 MiB VRAM).
+* **Key Reproduction Scripts:**
+  * `python validate_paper_results.py` — Verifies all 19 empirical claims, data integrity, and statistical tests in seconds.
+  * `python research_upgrade/scripts/generate_scientific_tables_and_figures.py` — Regenerates all publication figures and tables from raw logs.
+  * `python research_upgrade/scripts/run_qwen_judge_evaluation.py` — Re-runs cross-validation judging on Qwen2.5-3B.
+  * `python chatbot/app.py --test` — Runs unit tests on the edge conversational chatbot.
+* **Pretrained Weights & Checkpoints:**
+  * Base models: [`Qwen/Qwen2.5-3B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct), [`Qwen/Qwen2.5-7B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct), [`microsoft/Phi-3.5-mini-instruct`](https://huggingface.co/microsoft/Phi-3.5-mini-instruct).
+  * QLoRA CPT Adapter Checkpoints (`checkpoint-17340`): [Hugging Face Hub (`kancharla-vyshnavi`)](https://huggingface.co/kancharla-vyshnavi).
+
+---
+
+## 📑 Citation & Contact
+
+If you find HinglishEval useful in your research or applications, please cite:
+
+```bibtex
+@article{kancharla2026hinglisheval,
+  title={HinglishEval: Multi-Dimensional LLM-as-a-Judge Reliability and Benchmark for Hindi-English Code-Mixed Generation},
+  author={Kancharla, Vyshnavi},
+  journal={arXiv preprint},
+  year={2026},
+  url={https://github.com/kancharla-vyshnavi/A-Multi-Dimensional-Benchmark-of-LLMs-for-Hindi-English-Code-Mixed-Generation}
+}
+```
+
+* **Manuscript:** Full research paper available in [`paper.md`](paper.md) and [`HinglishEval_Output_Tables.pdf`](HinglishEval_Output_Tables.pdf).
+* **License:** Released under the [MIT License](LICENSE).
+* **Contact & Questions:** For feedback or inquiries, open an issue or pull request on [GitHub](https://github.com/kancharla-vyshnavi/A-Multi-Dimensional-Benchmark-of-LLMs-for-Hindi-English-Code-Mixed-Generation).

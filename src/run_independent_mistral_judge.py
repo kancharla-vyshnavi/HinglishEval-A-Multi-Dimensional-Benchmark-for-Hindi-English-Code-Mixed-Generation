@@ -1,4 +1,4 @@
-﻿import csv
+import csv
 import json
 import re
 import time
@@ -15,7 +15,7 @@ from transformers import (
 # CONFIG
 # ============================================================
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 INPUT_CSV = (
     BASE_DIR
