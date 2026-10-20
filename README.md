@@ -1,7 +1,8 @@
-HinglishEval: A Multi-Dimensional Benchmark for Hindi-English Code-Mixed Generation
- 
-HinglishEval studies the quality and reliability of Hindi–English (Hinglish) text generation. It combines a controlled four-model benchmark, linguistic diagnostics, automated judging, human evaluation, statistical analysis, error analysis, and a Python-based human-rating interface.
-Quickstart
+# HinglishEval: A Multi-Dimensional Benchmark for Hindi-English Code-Mixed Generation
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+
 # 1. Clone and enter the repository
 git clone https://github.com/kancharla-vyshnavi/A-Multi-Dimensional-Benchmark-of-LLMs-for-Hindi-English-Code-Mixed-Generation.git
 cd A-Multi-Dimensional-Benchmark-of-LLMs-for-Hindi-English-Code-Mixed-Generation
