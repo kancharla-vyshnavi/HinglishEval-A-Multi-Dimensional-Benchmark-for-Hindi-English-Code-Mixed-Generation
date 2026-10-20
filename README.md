@@ -1,30 +1,4 @@
-## HinglishEval: A Multi-Dimensional Benchmark for Hindi–English Code-Mixed Generation
-
-<p align="center">
-  <strong>Do Large Language Models Actually Write Natural Hinglish?</strong>
-  <br />
-  A systematic evaluation of fluency, code-mixing, Hindi grammar, prompt adherence, spelling consistency, and overall quality.
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Task-Hinglish%20Generation-blue" alt="Task: Hinglish Generation" />
-  <img src="https://img.shields.io/badge/Models-4-purple" alt="Four models" />
-  <img src="https://img.shields.io/badge/Benchmark-1%2C000%20Prompts-orange" alt="1000 prompts" />
-  <img src="https://img.shields.io/badge/Human%20Evaluation-2%20Annotators-green" alt="Two annotators" />
-  <img src="https://img.shields.io/badge/Framework-PyTorch%20%7C%20Transformers-red" alt="PyTorch and Transformers" />
-</p>
-
-<p align="center">
-  <a href="#overview">Overview</a> •
-  <a href="#key-findings">Key Findings</a> •
-  <a href="#results">Results</a> •
-  <a href="#methodology">Methodology</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#reproducibility">Reproducibility</a> •
-  <a href="#citation">Citation</a>
-</p>
-
----
+# HinglishEval: A Multi-Dimensional Benchmark for Hindi–English Code-Mixed Generation
 
 **Do Large Language Models Actually Write Natural Hinglish?**
 
@@ -488,4 +462,3 @@ Please consult the relevant original papers, documentation, and licenses when us
 
 Built by Kancharla Vyshnavi  
 B.Tech CSE (AI), Narayana Engineering College, Nellore
-
